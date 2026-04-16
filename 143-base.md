@@ -102,89 +102,98 @@
 [062] [SYNTAX] gfx/thebes/gfxCoreTextShaper.h [EXP]
 [063] [GUARD] [SYNTAX] gfx/thebes/gfxFontEntry.cpp [EXP]
 [064] [GUARD] gfx/thebes/gfxGraphiteShaper.cpp [EXP]
-gfx/thebes/gfxGraphiteShaper.h
-gfx/thebes/gfxMacFont.cpp
-gfx/thebes/gfxMacPlatformFontList.h
-gfx/thebes/gfxMacPlatformFontList.mm
-gfx/thebes/gfxMacUtils.cpp
-gfx/thebes/gfxPlatform.cpp
-gfx/thebes/gfxPlatformMac.cpp
+[065] [GUARD] [SHIM] gfx/thebes/gfxGraphiteShaper.h [EXP]
+[066] [SYNTAX] gfx/thebes/gfxMacFont.cpp [EXP]
+[067] [NOVEL] gfx/thebes/gfxMacPlatformFontList.h [EXP]
+[068] [NOVEL] gfx/thebes/gfxMacPlatformFontList.mm [EXP]
+[069] [GUARD] gfx/thebes/gfxMacUtils.cpp [EXP]
+[070] [SHIM] gfx/thebes/gfxPlatform.cpp [EXP]
+[071] [SYNTAX] gfx/thebes/gfxPlatformMac.cpp [EXP]
 ---------------
-gfx/wr/wr_glyph_rasterizer/src/platform/macos/font.rs
+<!-- -->
+[072] [NOVEL] gfx/wr/wr_glyph_rasterizer/src/platform/macos/font.rs [EXP]
 ---------------
-image/decoders/icon/mac/nsIconChannelCocoa.mm
+[073] [GUARD] [SYNTAX] image/decoders/icon/mac/nsIconChannelCocoa.mm [EXP]
 ---------------
-ipc/chromium/moz.build
-ipc/chromium/src/base/message_loop.cc
-ipc/chromium/src/base/message_loop.h
-ipc/chromium/src/base/message_pump_kqueue.cc
-ipc/chromium/src/base/message_pump_kqueue.h
-ipc/chromium/src/base/process_util.h
-ipc/chromium/src/base/process_util_mac.mm
-ipc/chromium/src/base/process_util_posix.cc
-ipc/chromium/src/chrome/common/ipc_channel.cc
-ipc/chromium/src/chrome/common/ipc_channel.h
-ipc/chromium/src/chrome/common/ipc_channel_posix.cc
-ipc/chromium/src/chrome/common/ipc_message.cc
-ipc/chromium/src/chrome/common/ipc_message.h
-ipc/chromium/src/chrome/common/ipc_message_utils.h
-ipc/chromium/src/chrome/common/mach_ipc_mac.cc
+[074] [BUILD] ipc/chromium/moz.build [EXP]
 ---------------
-ipc/glue/GeckoChildProcessHost.cpp
-ipc/glue/IOThread.cpp
+[075] [GUARD] ipc/chromium/src/base/message_loop.cc [EXP]
+[076] [GUARD] ipc/chromium/src/base/message_loop.h [EXP]
+[077] [NOVEL] ipc/chromium/src/base/message_pump_kqueue.cc [EXP]
+[078] [REVERT] ipc/chromium/src/base/message_pump_kqueue.h [EXP]
+[GUARD] ipc/chromium/src/base/process_util.h
+[SHIM] ipc/chromium/src/base/process_util_mac.mm
+[NOVEL] ipc/chromium/src/base/process_util_posix.cc
+--------------
+[GUARD] ipc/chromium/src/chrome/common/ipc_channel.cc
+[GUARD] ipc/chromium/src/chrome/common/ipc_channel.h
+[GUARD] ipc/chromium/src/chrome/common/ipc_channel_posix.cc
+[GUARD] ipc/chromium/src/chrome/common/ipc_message.cc
+[GUARD] ipc/chromium/src/chrome/common/ipc_message.h
+[GUARD] ipc/chromium/src/chrome/common/ipc_message_utils.h
+[GUARD] ipc/chromium/src/chrome/common/mach_ipc_mac.cc
 ---------------
-js/src/jit/ProcessExecutableMemory.cpp
+[GUARD] ipc/glue/GeckoChildProcessHost.cpp
+[GUARD] ipc/glue/IOThread.cpp
 ---------------
-layout/base/nsDocumentViewer.cpp
-layout/base/nsLayoutUtils.cpp
+[GUARD] js/src/jit/ProcessExecutableMemory.cpp
 ---------------
-layout/generic/nsContainerFrame.cpp
+[IGNORE] layout/base/nsDocumentViewer.cpp (comments only)
+[IGNORE] layout/base/nsLayoutUtils.cpp (new lines only)
 ---------------
-media/libjpeg/simd/x86_64/jsimd.c
+[SYNTAX] layout/generic/nsContainerFrame.cpp
 ---------------
-media/libsoundtouch/moz-libsoundtouch.patch
-media/libsoundtouch/moz.yaml
-media/libsoundtouch/src/RLBoxSoundTouchFactory.h
-media/libsoundtouch/src/STTypes.h
-media/libsoundtouch/src/SoundTouch.h
-media/libsoundtouch/src/SoundTouchFactory.cpp
-media/libsoundtouch/src/SoundTouchFactory.h
-media/libsoundtouch/src/moz.build
+[GUARD] media/libjpeg/simd/x86_64/jsimd.c
 ---------------
-media/libvpx/libvpx/vpx_ports/vpx_timer.h
+[BUILD] media/libsoundtouch/moz-libsoundtouch.patch
+[BUILD] media/libsoundtouch/moz.yaml
 ---------------
-memory/build/Mutex.cpp
-memory/build/Mutex.h
+[ALIAS] media/libsoundtouch/src/RLBoxSoundTouchFactory.h
+[ALIAS] media/libsoundtouch/src/STTypes.h
+[ALIAS] media/libsoundtouch/src/SoundTouch.h
+[ALIAS] media/libsoundtouch/src/SoundTouchFactory.cpp
+[ATLAS] media/libsoundtouch/src/SoundTouchFactory.h
+[BUILD] media/libsoundtouch/src/moz.build
 ---------------
-mfbt/RandomNum.cpp
+[SHIM] media/libvpx/libvpx/vpx_ports/vpx_timer.h
 ---------------
-mobile/android/version.txt
+[GUARD] memory/build/Mutex.cpp
+[GUARD] memory/build/Mutex.h
 ---------------
-mozglue/baseprofiler/core/Flow.cpp
+[GUARD] mfbt/RandomNum.cpp
 ---------------
-mozglue/misc/AwakeTimeStamp.cpp
-mozglue/misc/Mutex_posix.cpp
-mozglue/misc/Now.cpp
+[IGNORED] mobile/android/version.txt (semantic version)
 ---------------
-mozglue/static/rust/build.rs
-mozglue/static/rust/lib.rs
+[SHIM] mozglue/baseprofiler/core/Flow.cpp
 ---------------
-netwerk/protocol/http/MicrosoftEntraSSOUtils.mm
+[SHIM] mozglue/misc/AwakeTimeStamp.cpp
+[GUARD] mozglue/misc/Mutex_posix.cpp
+[SHIM] mozglue/misc/Now.cpp
 ---------------
-netwerk/test/http3server/moz.build
+ <!--  -->
+[GUARD] mozglue/static/rust/build.rs
+ <!--  -->
+[GUARD] mozglue/static/rust/lib.rs
 ---------------
-python/mozboot/mozboot/osx.py
-python/mozboot/mozboot/util.py
-python/mozbuild/mozbuild/test/configure/macos_fake_sdk/SDKSettings.plist
-python/mozbuild/mozbuild/test/configure/test_toolchain_configure.py
+[SYNTAX] netwerk/protocol/http/MicrosoftEntraSSOUtils.mm
 ---------------
-security/certverifier/NSSCertDBTrustDomain.cpp
+[IGNORED] netwerk/test/http3server/moz.build (new lines only)
 ---------------
-security/manager/ssl/osclientcerts/Cargo.toml
-security/manager/ssl/osclientcerts/src/backend_macos.rs
-security/manager/ssl/osclientcerts/src/bindings_macos.rs
+[IGNORED] python/mozboot/mozboot/osx.py (logic to build firefox-dynasty with on macOS 10.14)
+[IGNORED] python/mozboot/mozboot/util.py (outdated Rust version)
+[IGNORED] python/mozbuild/mozbuild/test/configure/macos_fake_sdk/SDKSettings.plist (lower the SDK requirement floor)
+[IGNORED] python/mozbuild/mozbuild/test/configure/test_toolchain_configure.py (lower the minimum targeted floor in accordance with macOS 10.14 SDK)
 ---------------
-security/rlbox/moz.build
+[GUARD] security/certverifier/NSSCertDBTrustDomain.cpp
+---------------
+ <!--  -->
+[ALIAS] security/manager/ssl/osclientcerts/Cargo.toml
+ <!--  -->
+[NOVEL] security/manager/ssl/osclientcerts/src/backend_macos.rs
+ <!--  -->
+[REVERT] security/manager/ssl/osclientcerts/src/bindings_macos.rs
+---------------
+[NOVEL] security/rlbox/moz.build
 ---------------
 [GUARD] security/sandbox/common/test/SandboxTestingChildTests.h
 [GUARD] security/sandbox/mac/Sandbox.mm
