@@ -1,0 +1,48 @@
+From b0104c8a9ce98dd20f3986c97a35949e7bdf05ff Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Fri, 17 Apr 2026 08:10:57 +0700
+Subject: [PATCH 26/26] Cargo.lock_patchset
+
+---
+ Cargo.lock | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 2ac65181b1a..61512a4a05b 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1235,6 +1235,7 @@ dependencies = [
+  "unic-langid",
+  "uuid",
+  "warp",
++ "whatsys",
+  "windows-sys",
+  "yaml-rust2",
+  "zip",
+@@ -3984,6 +3985,7 @@ dependencies = [
+  "log",
+  "objc",
+  "paste",
++ "whatsys",
+ ]
+ 
+ [[package]]
+@@ -5055,6 +5057,7 @@ dependencies = [
+  "nserror",
+  "pkcs11-bindings",
+  "rsclientcerts",
++ "whatsys",
+  "winapi",
+  "xpcom",
+ ]
+@@ -8087,6 +8090,7 @@ dependencies = [
+  "cfg-if",
+  "libc",
+  "once_cell",
++ "whatsys",
+  "winapi",
+ ]
+ 
+-- 
+2.53.0
+

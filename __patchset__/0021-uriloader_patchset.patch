@@ -1,0 +1,39 @@
+From db5d46cd4d1df00aad62d2f94ef77aa5eb06004b Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Fri, 17 Apr 2026 08:08:44 +0700
+Subject: [PATCH 21/26] uriloader_patchset
+
+---
+ uriloader/exthandler/mac/nsOSHelperAppService.mm | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/uriloader/exthandler/mac/nsOSHelperAppService.mm b/uriloader/exthandler/mac/nsOSHelperAppService.mm
+index 769d5acccea..75addc8f29a 100644
+--- a/uriloader/exthandler/mac/nsOSHelperAppService.mm
++++ b/uriloader/exthandler/mac/nsOSHelperAppService.mm
+@@ -47,12 +47,17 @@ nsresult GetDefaultBundleURL(const nsACString& aScheme, CFURLRef* aBundleURL) {
+           ::CFURLCreateWithString(NULL, lookupCFString, NULL);
+ 
+       if (lookupCFURL) {
+-        *aBundleURL =
+-            ::LSCopyDefaultApplicationURLForURL(lookupCFURL, kLSRolesAll, NULL);
+-        if (*aBundleURL) {
+-          rv = NS_OK;
++        if (@available(macOS 10.10, *)) {
++          *aBundleURL = ::LSCopyDefaultApplicationURLForURL(lookupCFURL, kLSRolesAll, NULL);
++          if (*aBundleURL) {
++            rv = NS_OK;
++          }
++        } else {
++          OSStatus theErr = ::LSGetApplicationForURL(lookupCFURL, kLSRolesAll, NULL, aBundleURL);
++          if (theErr == noErr && *aBundleURL) {
++            rv = NS_OK;
++          }
+         }
+-
+         ::CFRelease(lookupCFURL);
+       }
+ 
+-- 
+2.53.0
+

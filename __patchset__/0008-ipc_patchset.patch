@@ -1,0 +1,1090 @@
+From d677f1db10c9593d41d9d16fbc506d44a05849d9 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Fri, 17 Apr 2026 08:03:55 +0700
+Subject: [PATCH 08/26] ipc_patchset
+
+---
+ ipc/chromium/moz.build                        |  19 +-
+ ipc/chromium/src/base/message_loop.cc         |  18 +-
+ ipc/chromium/src/base/message_loop.h          |  12 +-
+ ipc/chromium/src/base/message_pump_kqueue.cc  | 127 +++++++---
+ ipc/chromium/src/base/message_pump_kqueue.h   |   4 +
+ ipc/chromium/src/base/process_util.h          |   9 +-
+ ipc/chromium/src/base/process_util_mac.mm     | 101 +++++---
+ ipc/chromium/src/base/process_util_posix.cc   | 229 ++++++++++++++----
+ ipc/chromium/src/chrome/common/ipc_channel.cc |   7 +-
+ ipc/chromium/src/chrome/common/ipc_channel.h  |   4 +-
+ .../src/chrome/common/ipc_channel_posix.cc    |   4 +-
+ ipc/chromium/src/chrome/common/ipc_message.cc |   3 +
+ ipc/chromium/src/chrome/common/ipc_message.h  |   6 +
+ .../src/chrome/common/ipc_message_utils.h     |  11 +-
+ .../src/chrome/common/mach_ipc_mac.cc         |   5 +-
+ ipc/glue/GeckoChildProcessHost.cpp            |   5 +-
+ ipc/glue/IOThread.cpp                         |   6 +-
+ 17 files changed, 445 insertions(+), 125 deletions(-)
+
+diff --git a/ipc/chromium/moz.build b/ipc/chromium/moz.build
+index 95b43844d1d..8166566d70d 100644
+--- a/ipc/chromium/moz.build
++++ b/ipc/chromium/moz.build
+@@ -55,18 +55,21 @@ if CONFIG["TARGET_KERNEL"] == "WINNT":
+         "src/chrome/common/process_watcher_win.cc",
+     ]
+ 
+-elif CONFIG["TARGET_KERNEL"] != "Darwin":
+-    UNIFIED_SOURCES += [
+-        "src/base/message_pump_libevent.cc",
+-    ]
++#it ain't workin, sorry nika
++    # elif CONFIG["TARGET_KERNEL"] != "Darwin":
++    #UNIFIED_SOURCES += [
++    #    "src/base/message_pump_libevent.cc",
++    #]
+ 
+-    if not CONFIG["MOZ_SYSTEM_LIBEVENT"]:
++elif not CONFIG["MOZ_SYSTEM_LIBEVENT"]:
+         DIRS += ["src/third_party"]
+ 
+ if CONFIG["TARGET_KERNEL"] != "WINNT":
+     UNIFIED_SOURCES += [
+         "src/base/condition_variable_posix.cc",
+         "src/base/lock_impl_posix.cc",
++        #it ain't workin, sorry nika
++        "src/base/message_pump_libevent.cc",
+         "src/base/platform_thread_posix.cc",
+         "src/base/process_util_posix.cc",
+         "src/base/string16.cc",
+@@ -86,12 +89,14 @@ if CONFIG["TARGET_KERNEL"] != "WINNT":
+ 
+ if CONFIG["TARGET_KERNEL"] == "Darwin":
+     UNIFIED_SOURCES += [
+-        "src/base/message_pump_kqueue.cc",
++        #it ain't working. sorry nika
++        #"src/base/message_pump_kqueue.cc",
+         "src/base/message_pump_mac.mm",
+         "src/base/scoped_nsautorelease_pool.mm",
+         "src/base/sys_string_conversions_mac.mm",
+         "src/base/time_mac.cc",
+-        "src/chrome/common/ipc_channel_mach.cc",
++        #it ain't working. sorry nika
++        #"src/chrome/common/ipc_channel_mach.cc",
+         "src/chrome/common/mach_ipc_mac.cc",
+         "src/chrome/common/mach_message_source_mac.cc",
+     ]
+diff --git a/ipc/chromium/src/base/message_loop.cc b/ipc/chromium/src/base/message_loop.cc
+index c07963fe12d..5ec6e24d449 100644
+--- a/ipc/chromium/src/base/message_loop.cc
++++ b/ipc/chromium/src/base/message_loop.cc
+@@ -21,9 +21,10 @@
+ 
+ #if defined(XP_DARWIN)
+ #  include "base/message_pump_mac.h"
+-#  include "base/message_pump_kqueue.h"
++//it ain't workin'. sorry nika 
++//#  include "base/message_pump_kqueue.h"
+ #endif
+-#if defined(XP_UNIX) && !defined(XP_DARWIN)
++#if defined(XP_UNIX) // /*it ain't workin. sorry nika*/ && !defined(XP_DARWIN)
+ #  include "base/message_pump_libevent.h"
+ #endif
+ #if defined(XP_LINUX) || defined(__DragonFly__) || defined(XP_FREEBSD) || \
+@@ -285,11 +286,12 @@ MessageLoop::MessageLoop(Type type, nsISerialEventTarget* aEventTarget)
+     pump_ = new base::MessagePumpForUI();
+ #  endif  // XP_LINUX
+   } else if (type_ == TYPE_IO) {
+-#  if defined(XP_DARWIN)
++// it ain't workin. sorry nika
++/*#  if defined(XP_DARWIN)
+     pump_ = new base::MessagePumpKqueue();
+-#  else
++#  else */
+     pump_ = new base::MessagePumpLibevent();
+-#  endif
++//#  endif
+   } else {
+     pump_ = new base::MessagePumpDefault();
+   }
+@@ -711,7 +713,8 @@ bool MessageLoopForIO::WaitForIOCompletion(DWORD timeout, IOHandler* filter) {
+   return pump_io()->WaitForIOCompletion(timeout, filter);
+ }
+ 
+-#elif defined(XP_DARWIN)
++//it ain't workin. sorry nika
++/*#elif defined(XP_DARWIN)
+ 
+ bool MessageLoopForIO::WatchFileDescriptor(int fd, bool persistent, Mode mode,
+                                            FileDescriptorWatcher* controller,
+@@ -726,9 +729,8 @@ bool MessageLoopForIO::WatchMachReceivePort(mach_port_t port,
+                                             MachPortWatcher* delegate) {
+   return pump_kqueue()->WatchMachReceivePort(port, controller, delegate);
+ }
+-
++*/
+ #else
+-
+ bool MessageLoopForIO::WatchFileDescriptor(int fd, bool persistent, Mode mode,
+                                            FileDescriptorWatcher* controller,
+                                            Watcher* delegate) {
+diff --git a/ipc/chromium/src/base/message_loop.h b/ipc/chromium/src/base/message_loop.h
+index 0f4d01df992..d62e2510b15 100644
+--- a/ipc/chromium/src/base/message_loop.h
++++ b/ipc/chromium/src/base/message_loop.h
+@@ -22,8 +22,10 @@
+ // We need this to declare base::MessagePumpWin::Dispatcher, which we should
+ // really just eliminate.
+ #  include "base/message_pump_win.h"
+-#elif defined(XP_DARWIN)
++//it ain't workin. sorry nika
++/*#elif defined(XP_DARWIN)
+ #  include "base/message_pump_kqueue.h"
++*/
+ #else
+ #  include "base/message_pump_libevent.h"
+ #endif
+@@ -331,10 +333,12 @@ class MessageLoop : public base::MessagePump::Delegate {
+   base::MessagePumpWin* pump_win() {
+     return static_cast<base::MessagePumpWin*>(pump_.get());
+   }
+-#elif defined(XP_DARWIN)
++//it ain't workin' sorry nika
++/*#elif defined(XP_DARWIN)
+   base::MessagePumpKqueue* pump_kqueue() {
+     return static_cast<base::MessagePumpKqueue*>(pump_.get());
+   }
++*/
+ #else
+   base::MessagePumpLibevent* pump_libevent() {
+     return static_cast<base::MessagePumpLibevent*>(pump_.get());
+@@ -533,6 +537,8 @@ class MessageLoopForIO : public MessageLoop {
+     return static_cast<base::MessagePumpForIO*>(pump_.get());
+   }
+ 
++//it ain't workin. sorry nika
++/*
+ #elif defined(XP_DARWIN)
+ 
+   typedef base::MessagePumpKqueue::Watcher Watcher;
+@@ -554,7 +560,7 @@ class MessageLoopForIO : public MessageLoop {
+   bool WatchMachReceivePort(mach_port_t port,
+                             MachPortWatchController* controller,
+                             MachPortWatcher* delegate);
+-
++*/
+ #else
+   typedef base::MessagePumpLibevent::Watcher Watcher;
+   typedef base::MessagePumpLibevent::FileDescriptorWatcher
+diff --git a/ipc/chromium/src/base/message_pump_kqueue.cc b/ipc/chromium/src/base/message_pump_kqueue.cc
+index 7159a223f4b..737f9c02ad7 100644
+--- a/ipc/chromium/src/base/message_pump_kqueue.cc
++++ b/ipc/chromium/src/base/message_pump_kqueue.cc
+@@ -15,11 +15,39 @@
+ #include "base/logging.h"
+ #include "base/scoped_nsautorelease_pool.h"
+ #include "base/eintr_wrapper.h"
++#include "nsCocoaFeatures.h"
+ 
+ namespace base {
+ 
+ namespace {
+ 
++// Prior to macOS 10.12, a kqueue could not watch individual Mach ports, only
++// port sets. MessagePumpKqueue will directly use Mach ports in the kqueue if
++// it is possible.
++bool KqueueNeedsPortSet() {
++#ifdef XP_DARWIN 
++  static const bool kqueue_needs_port_set = !nsCocoaFeatures::OnSierraOrLater();
++  return kqueue_needs_port_set;
++#else
++  return false;
++#endif
++}
++
++// Prior to macOS 10.14, kqueue timers may spuriously wake up, because earlier
++// wake ups race with timer resets in the kernel. As of macOS 10.14, updating a
++// timer from the thread that reads the kqueue does not cause spurious wakeups.
++// Note that updating a kqueue timer from one thread while another thread is
++// waiting in a kevent64 invocation is still (inherently) racy.
++bool KqueueTimersSpuriouslyWakeUp() {
++#ifdef XP_DARWIN 
++  static const bool kqueue_timers_spuriously_wakeup = !nsCocoaFeatures::OnMojaveOrLater();
++  return kqueue_timers_spuriously_wakeup;
++#else
++  // This still happens on iOS15.
++  return true;
++#endif
++}
++
+ // On iOS, the normal `kevent64` method is blocked by the content process
+ // sandbox, so instead we use `be_kevent64` from the BrowserEngineCore library.
+ static int platform_kevent64(int fd, const kevent64_s* changelist, int nchanges,
+@@ -113,13 +141,30 @@ MessagePumpKqueue::MessagePumpKqueue() : kqueue_(kqueue()) {
+   // Specify the wakeup port event to directly receive the Mach message as part
+   // of the kevent64() syscall.
+   kevent64_s event{};
+-  event.ident = wakeup_.get();
+-  event.filter = EVFILT_MACHPORT;
+-  event.flags = EV_ADD;
+-  event.fflags = MACH_RCV_MSG;
+-  event.ext[0] = reinterpret_cast<uint64_t>(&wakeup_buffer_);
+-  event.ext[1] = sizeof(wakeup_buffer_);
+-
++  if (KqueueNeedsPortSet()) {
++    mach_port_t compat_port;
++    kr = mach_port_allocate(mach_task_self(), MACH_PORT_RIGHT_PORT_SET,
++                            &compat_port);
++    CHECK(kr == KERN_SUCCESS) << "mach_port_allocate PORT_SET";
++    port_set_.reset(compat_port);
++    kr = mach_port_insert_member(mach_task_self(), wakeup_.get(),
++                                 port_set_.get());
++    CHECK(kr == KERN_SUCCESS) << "mach_port_insert_member";
++    event.ident = port_set_.get();
++    event.filter = EVFILT_MACHPORT;
++    event.flags = EV_ADD;
++  } else {
++    // When not using a port set, the wakeup port event can be specified to
++    // directly receive the Mach message as part of the kevent64() syscall.
++    // This is not done when using a port set, since that would potentially
++    // receive client MachPortWatchers' messages.
++    event.ident = wakeup_.get();
++    event.filter = EVFILT_MACHPORT;
++    event.flags = EV_ADD;
++    event.fflags = MACH_RCV_MSG;
++    event.ext[0] = reinterpret_cast<uint64_t>(&wakeup_buffer_);
++    event.ext[1] = sizeof(wakeup_buffer_);
++  }
+   int rv = ChangeOneEvent(kqueue_, &event);
+   DCHECK(rv == 0) << "kevent64";
+ }
+@@ -197,16 +242,25 @@ bool MessagePumpKqueue::WatchMachReceivePort(
+     return false;
+   }
+ 
+-  kevent64_s event{};
+-  event.ident = port;
+-  event.filter = EVFILT_MACHPORT;
+-  event.flags = EV_ADD;
+-  int rv = ChangeOneEvent(kqueue_, &event);
+-  if (rv < 0) {
+-    DLOG(ERROR) << "kevent64";
+-    return false;
++  if (KqueueNeedsPortSet()) {
++    kern_return_t kr =
++        mach_port_insert_member(mach_task_self(), port, port_set_.get());
++    if (kr != KERN_SUCCESS) {
++      DLOG(ERROR) << "mach_port_insert_member" << mach_error_string(kr);
++      return false;
++    }
++  } else {
++    kevent64_s event{};
++    event.ident = port;
++    event.filter = EVFILT_MACHPORT;
++    event.flags = EV_ADD;
++    int rv = ChangeOneEvent(kqueue_, &event);
++    if (rv < 0) {
++      DLOG(ERROR) << "kevent64";
++      return false;
++    }
++    ++event_count_;
+   }
+-  ++event_count_;
+ 
+   controller->Init(this, port, delegate);
+   port_controllers_.InsertOrUpdate(port, controller);
+@@ -268,18 +322,25 @@ bool MessagePumpKqueue::StopWatchingMachPort(
+   mach_port_t port = controller->port();
+   controller->Reset();
+   port_controllers_.Remove(port);
+-
+-  kevent64_s event{};
+-  event.ident = port;
+-  event.filter = EVFILT_MACHPORT;
+-  event.flags = EV_DELETE;
+-  --event_count_;
+-  int rv = ChangeOneEvent(kqueue_, &event);
+-  if (rv < 0) {
+-    DLOG(ERROR) << "kevent64";
+-    return false;
++  if (KqueueNeedsPortSet()) {
++    kern_return_t kr =
++        mach_port_extract_member(mach_task_self(), port, port_set_.get());
++    if (kr != KERN_SUCCESS) {
++      DLOG(ERROR) << "mach_port_extract_member" << mach_error_string(kr);
++      return false;
++    }
++  } else {
++    kevent64_s event{};
++    event.ident = port;
++    event.filter = EVFILT_MACHPORT;
++    event.flags = EV_DELETE;
++    --event_count_;
++    int rv = ChangeOneEvent(kqueue_, &event);
++    if (rv < 0) {
++      DLOG(ERROR) << "kevent64";
++      return false;
++    }
+   }
+-
+   return true;
+ }
+ 
+@@ -375,11 +436,21 @@ bool MessagePumpKqueue::ProcessEvents(Delegate* delegate, int count) {
+         }
+       }
+     } else if (event->filter == EVFILT_MACHPORT) {
+-      mach_port_t port = event->ident;
++      mach_port_t port = KqueueNeedsPortSet() ? event->data : event->ident;
+ 
+       if (port == wakeup_.get()) {
+         // The wakeup event has been received, do not treat this as "doing
+         // work", this just wakes up the pump.
++        if (KqueueNeedsPortSet()) {
++          // When using the kqueue directly, the message can be received
++          // straight into a buffer that was created when adding the event.
++          // But when using a port set, the message must be drained manually.
++          wakeup_buffer_.header.msgh_local_port = port;
++          wakeup_buffer_.header.msgh_size = sizeof(wakeup_buffer_);
++          kern_return_t kr = mach_msg_receive(&wakeup_buffer_.header);
++          DLOG_IF(ERROR, kr != KERN_SUCCESS)
++              << "mach_msg_receive wakeup" << mach_error_string(kr);
++        }
+         continue;
+       }
+ 
+diff --git a/ipc/chromium/src/base/message_pump_kqueue.h b/ipc/chromium/src/base/message_pump_kqueue.h
+index 1bbb3ad1fd3..27cb1f95a3a 100644
+--- a/ipc/chromium/src/base/message_pump_kqueue.h
++++ b/ipc/chromium/src/base/message_pump_kqueue.h
+@@ -152,6 +152,10 @@ class MessagePumpKqueue : public MessagePump {
+   // Scratch buffer that is used to receive the message sent to |wakeup_|.
+   mach_msg_empty_rcv_t wakeup_buffer_{};
+ 
++  // A Mach port set used to watch ports from WatchMachReceivePort(). This is
++  // only used on macOS <10.12, where kqueues cannot watch ports directly.
++  mozilla::UniqueMachPortSet port_set_;
++
+   // Watch controllers for FDs. IDs are generated from next_fd_controller_id_
+   // and are stored in the kevent64_s::udata field.
+   nsTHashMap<uint64_t, FileDescriptorWatcher*> fd_controllers_;
+diff --git a/ipc/chromium/src/base/process_util.h b/ipc/chromium/src/base/process_util.h
+index b0585e5e5ab..951238835b2 100644
+--- a/ipc/chromium/src/base/process_util.h
++++ b/ipc/chromium/src/base/process_util.h
+@@ -96,12 +96,19 @@ void CloseProcessHandle(ProcessHandle process);
+ ProcessId GetProcId(ProcessHandle process);
+ 
+ #if defined(XP_UNIX)
++#  if defined(XP_MACOSX)
++// Sets all file descriptors to close on exec except for stdin, stdout
++// and stderr.
++// TODO(agl): remove this function
++// WARNING: do not use. It's inherently race-prone in the face of
++// multi-threading.
++void SetAllFDsToCloseOnExec();
++#  endif
+ // Close all file descriptors, except for std{in,out,err} and those
+ // for which the given function returns true.  Only call this function
+ // in a child process where you know that there aren't any other
+ // threads.
+ void CloseSuperfluousFds(void* aCtx, bool (*aShouldPreserve)(void*, int));
+-
+ typedef std::vector<std::pair<int, int> > file_handle_mapping_vector;
+ typedef std::map<std::string, std::string> environment_map;
+ 
+diff --git a/ipc/chromium/src/base/process_util_mac.mm b/ipc/chromium/src/base/process_util_mac.mm
+index ad7eede7f29..d1346a55ba9 100644
+--- a/ipc/chromium/src/base/process_util_mac.mm
++++ b/ipc/chromium/src/base/process_util_mac.mm
+@@ -10,6 +10,7 @@
+ #include <os/availability.h>
+ #include <spawn.h>
+ #include <sys/wait.h>
++#include <sys/syscall.h>
+ #include <unistd.h>
+ 
+ #include <string>
+@@ -26,7 +27,15 @@
+ extern "C" {
+ // N.B. the syscalls are available back to 10.5, but the C wrappers
+ // only in 10.12.  Fortunately, 10.15 is our current baseline.
+-int pthread_fchdir_np(int fd) API_AVAILABLE(macosx(10.12));
++int pthread_chdir_np(const char* dir)
++{
++    return syscall(SYS___pthread_chdir, dir);
++}
++
++int pthread_fchdir_np(int fd)
++{
++    return syscall(SYS___pthread_fchdir, fd);
++}
+ 
+ int responsibility_spawnattrs_setdisclaim(posix_spawnattr_t attrs, int disclaim)
+     API_AVAILABLE(macosx(10.14));
+@@ -86,14 +95,42 @@ Result<Ok, LaunchError> LaunchApp(const std::vector<std::string>& argv,
+     }
+   }
+ 
++
++  // macOS 10.15 allows adding a chdir operation to the file actions;
++  // this ought to be part of the standard but sadly is not.  On older
++  // versions, we can use a different nonstandard extension:
++  // pthread_{f,}chdir_np, so we can temporarily change the calling
++  // thread's cwd (which is then inherited by the child) without
++  // disturbing other threads, and then restore it afterwards.
++  int old_cwd_fd = -1;
+   if (!options.workdir.empty()) {
+-    int rv = posix_spawn_file_actions_addchdir_np(&file_actions,
+-                                                  options.workdir.c_str());
+-    if (rv != 0) {
+-      DLOG(WARNING) << "posix_spawn_file_actions_addchdir_np failed";
+-      return Err(LaunchError("posix_spawn_file_actions_addchdir", rv));
++    if (@available(macOS 10.15, *)) {
++      int rv = posix_spawn_file_actions_addchdir_np(&file_actions, options.workdir.c_str());
++      if (rv != 0) {
++        DLOG(WARNING) << "posix_spawn_file_actions_addchdir_np failed";
++        return Err(LaunchError("posix_spawn_file_actions_addchdir", rv));
++      }
++    } else {
++      old_cwd_fd = open(".", O_RDONLY | O_CLOEXEC | O_DIRECTORY);
++      if (old_cwd_fd < 0) {
++        DLOG(WARNING) << "open(\".\") failed";
++        return Err(LaunchError("open", errno));
++      }
++      if (pthread_chdir_np(options.workdir.c_str()) != 0) {
++        DLOG(WARNING) << "pthread_chdir_np failed";
++        return Err(LaunchError("pthread_chdir_np", errno));
++      }
++     }
++   }
++
++  auto thread_cwd_guard = mozilla::MakeScopeExit([old_cwd_fd] {
++    if (old_cwd_fd >= 0) {
++      if (pthread_fchdir_np(old_cwd_fd) != 0) {
++        DLOG(ERROR) << "pthread_fchdir_np failed; thread is in the wrong directory!";
++      }
++      close(old_cwd_fd);
+     }
+-  }
++  });
+ 
+   // Initialize spawn attributes.
+   posix_spawnattr_t spawnattr;
+@@ -104,7 +141,6 @@ Result<Ok, LaunchError> LaunchApp(const std::vector<std::string>& argv,
+   }
+   auto spawnattr_guard = mozilla::MakeScopeExit(
+       [&spawnattr] { posix_spawnattr_destroy(&spawnattr); });
+-
+ #if defined(XP_MACOSX) && defined(__aarch64__)
+   if (options.arch == PROCESS_ARCH_X86_64) {
+     cpu_type_t cpu_pref = CPU_TYPE_X86_64;
+@@ -120,31 +156,42 @@ Result<Ok, LaunchError> LaunchApp(const std::vector<std::string>& argv,
+ #endif
+ 
+   if (options.disclaim) {
+-    int err = responsibility_spawnattrs_setdisclaim(&spawnattr, 1);
+-    if (err != 0) {
+-      DLOG(WARNING) << "responsibility_spawnattrs_setdisclaim failed";
+-      return Err(LaunchError("responsibility_spawnattrs_setdisclaim", err));
++    if (@available(macOS 10.14, *)) {
++      int err = responsibility_spawnattrs_setdisclaim(&spawnattr, 1);
++      if (err != 0) {
++        DLOG(WARNING) << "responsibility_spawnattrs_setdisclaim failed";
++        return Err(LaunchError("responsibility_spawnattrs_setdisclaim", err));
++      }
+     }
+   }
+ 
+-  // Prevent the child process from inheriting any file descriptors
+-  // that aren't named in `file_actions`.  (This is an Apple-specific
+-  // extension to posix_spawn.)
+-  err = posix_spawnattr_setflags(&spawnattr, POSIX_SPAWN_CLOEXEC_DEFAULT);
+-  if (err != 0) {
+-    DLOG(WARNING) << "posix_spawnattr_setflags failed";
+-    return Err(LaunchError("posix_spawnattr_setflags", err));
+-  }
+-
+-  // Exempt std{in,out,err} from being closed by POSIX_SPAWN_CLOEXEC_DEFAULT.
+-  for (int fd = 0; fd <= STDERR_FILENO; ++fd) {
+-    err = posix_spawn_file_actions_addinherit_np(&file_actions, fd);
++  // thanks to @kencu at macports for suggesting posix_spawn has problems on
++  // 10.7. he was close, but it turns out its the POSIX_SPAWN_CLOEXEC_DEFAULT
++  // flag on the spawn attributes. kudos to the @textmate lads for confirming it (a9397 notes):
++  // https://github.com/textmate/textmate/blob/master/Applications/TextMate/about/Changes.md
++  if (@available(macOS 10.8, *)) {
++    // Prevent the child process from inheriting any file descriptors
++    // that aren't named in `file_actions`.  (This is an Apple-specific
++    // extension to posix_spawn.)
++    err = posix_spawnattr_setflags(&spawnattr, POSIX_SPAWN_CLOEXEC_DEFAULT);
+     if (err != 0) {
+-      DLOG(WARNING) << "posix_spawn_file_actions_addinherit_np failed";
+-      return Err(LaunchError("posix_spawn_file_actions_addinherit_np", err));
++      DLOG(WARNING) << "posix_spawnattr_setflags failed";
++      return Err(LaunchError("posix_spawnattr_setflags", err));
+     }
+-  }
+ 
++    // Exempt std{in,out,err} from being closed by POSIX_SPAWN_CLOEXEC_DEFAULT.
++    for (int fd = 0; fd <= STDERR_FILENO; ++fd) {
++      err = posix_spawn_file_actions_addinherit_np(&file_actions, fd);
++      if (err != 0) {
++        DLOG(WARNING) << "posix_spawn_file_actions_addinherit_np failed";
++        return Err(LaunchError("posix_spawn_file_actions_addinherit_np", err));
++      }
++    }
++  } else {
++    // Make sure we don't leak any FDs to the child process by marking all FDs
++    // as close-on-exec.
++    SetAllFDsToCloseOnExec();
++  }
+   int pid = 0;
+   int spawn_succeeded = (posix_spawnp(&pid, argv_copy[0], &file_actions,
+                                       &spawnattr, argv_copy, vars.get()) == 0);
+diff --git a/ipc/chromium/src/base/process_util_posix.cc b/ipc/chromium/src/base/process_util_posix.cc
+index 23b88070fa0..55e2617e6c5 100644
+--- a/ipc/chromium/src/base/process_util_posix.cc
++++ b/ipc/chromium/src/base/process_util_posix.cc
+@@ -203,51 +203,154 @@ void CloseSuperfluousFds(void* aCtx, bool (*aShouldPreserve)(void*, int)) {
+   }
+ }
+ 
++// Sets all file descriptors to close on exec except for stdin, stdout
++// and stderr.
++// TODO(agl): Remove this function. It's fundamentally broken for multithreaded
++// apps.
++void SetAllFDsToCloseOnExec() {
++#if defined(XP_LINUX)
++  const char fd_dir[] = "/proc/self/fd";
++#elif defined(XP_MACOSX) || defined(XP_FREEBSD)
++  const char fd_dir[] = "/dev/fd";
++#endif
++  ScopedDIR dir_closer(opendir(fd_dir));
++  DIR *dir = dir_closer.get();
++  if (NULL == dir) {
++    DLOG(ERROR) << "Unable to open " << fd_dir;
++    return;
++  }
++  struct dirent *ent;
++  while ((ent = readdir(dir))) {
++    // Skip . and .. entries.
++    if (ent->d_name[0] == '.')
++      continue;
++    int i = atoi(ent->d_name);
++    // We don't close stdin, stdout or stderr.
++    if (i <= STDERR_FILENO)
++      continue;
++    int flags = fcntl(i, F_GETFD);
++    if ((flags == -1) || (fcntl(i, F_SETFD, flags | FD_CLOEXEC) == -1)) {
++      DLOG(ERROR) << "fcntl failure.";
++    }
++  }
++}
++#ifdef MOZ_ENABLE_FORKSERVER
++// Returns whether a process (assumed to still exist) is in the zombie
++// state.  Any failures (if the process doesn't exist, if /proc isn't
++// mounted, etc.) will return true, so that we don't try again.
++static bool IsZombieProcess(pid_t pid) {
++#  ifdef XP_LINUX
++  auto path = mozilla::Smprintf("/proc/%d/stat", pid);
++  int fd = open(path.get(), O_RDONLY | O_CLOEXEC);
++  if (fd < 0) {
++    int e = errno;
++    DLOG(ERROR) << "failed to open " << path.get() << ": " << strerror(e);
++    return true;
++  }
++
++  // /proc/%d/stat format is approximately:
++  //
++  // %d (%s) %c %d %d %d %d %d ...
++  //
++  // The state is the third field; the second field is the thread
++  // name, in parentheses, but it can contain arbitrary characters.
++  // So, we read the whole line, check for the last ')' because all of
++  // the following fields are numeric, and move forward from there.
++  //
++  // And because (unlike other uses of this info the codebase) we
++  // don't care about those other fields, we can read a smaller amount
++  // of the file.
++
++  char buffer[64];
++  ssize_t len = HANDLE_EINTR(read(fd, buffer, sizeof(buffer) - 1));
++  int e = errno;
++  close(fd);
++  if (len < 1) {
++    DLOG(ERROR) << "failed to read " << path.get() << ": " << strerror(e);
++    return true;
++  }
++
++  buffer[len] = '\0';
++  char* rparen = strrchr(buffer, ')');
++  if (!rparen || rparen[1] != ' ' || rparen[2] == '\0') {
++    DCHECK(false) << "/proc/{pid}/stat parse error";
++    CHROMIUM_LOG(ERROR) << "bad data in /proc/" << pid << "/stat";
++    return true;
++  }
++  if (rparen[2] == 'Z') {
++    DLOG(ERROR) << "process " << pid << " is a zombie";
++    return true;
++  }
++  return false;
++#  else  // not XP_LINUX
++  // The situation where this matters is Linux-specific (pid
++  // namespaces), so we don't need to bother on other Unixes.
++  return false;
++#  endif
++}
++#endif  // MOZ_ENABLE_FORKSERVER
++
+ ProcessStatus WaitForProcess(ProcessHandle handle, BlockingWait blocking,
+                              int* info_out) {
+   *info_out = 0;
+ 
+-#if defined(MOZ_ENABLE_FORKSERVER) || !defined(HAVE_WAITID)
+-  auto handleStatus = [&](int status) -> ProcessStatus {
+-    if (WIFEXITED(status)) {
+-      *info_out = WEXITSTATUS(status);
+-      return ProcessStatus::Exited;
+-    }
+-    if (WIFSIGNALED(status)) {
+-      *info_out = WTERMSIG(status);
+-      return ProcessStatus::Killed;
+-    }
+-    LOG_AND_ASSERT << "unexpected wait status: " << status;
+-    return ProcessStatus::Error;
+-  };
+-#endif
+-
++  // Abstraction of the fork server workaround, inserted into the
++  // appropriate point in the waitid and waitpid paths; returns
++  // Nothing if the fork server isn't involved, or Some(rv) to return
++  // rv from WaitForProcess.
+   auto handleForkServer = [&]() -> mozilla::Maybe<ProcessStatus> {
+ #ifdef MOZ_ENABLE_FORKSERVER
++    // With the current design of the fork server we can't waitpid
++    // directly.  Instead, we simulate it by polling with `kill(pid, 0)`;
++    // this is unreliable because pids can be reused, so we could report
++    // that the process is still running when it's exited.
++    //
++    // Because of that possibility, the "blocking" mode has an arbitrary
++    // limit on the amount of polling it does for the process's
++    // nonexistence; if that limit is exceeded, an error is returned.
++    //
++    // See also bug 1752638 to improve the fork server so we can get
++    // accurate process information.
++    static constexpr long kDelayMS = 500;
++    static constexpr int kAttempts = 10;
++
+     if (errno != ECHILD || !mozilla::ipc::ForkServiceChild::WasUsed()) {
+       return mozilla::Nothing();
+     }
+ 
+-    auto forkService = mozilla::ipc::ForkServiceChild::Get();
+-    if (!forkService) {
+-      DLOG(WARNING) << "fork server exited too soon";
+-      return mozilla::Nothing();
++    // Note that this loop won't loop in the BlockingWait::No case.
++    for (int attempt = 0; attempt < kAttempts; ++attempt) {
++      const int rv = kill(handle, 0);
++      if (rv == 0) {
++        // Process is still running (or its pid was reassigned; oops).
++        if (blocking == BlockingWait::No) {
++          // Annoying edge case (bug 1881386): if pid 1 isn't a real
++          // `init`, like in some container environments, and if the child
++          // exited after the fork server, it could become a permanent
++          // zombie.  We treat it as dead in that case.
++          return mozilla::Some(IsZombieProcess(handle)
++                                   ? ProcessStatus::Exited
++                                   : ProcessStatus::Running);
++        }
++      } else {
++        if (errno == ESRCH) {
++          return mozilla::Some(ProcessStatus::Exited);
++        }
++        // Some other error (permissions, if it's the wrong process?).
++        *info_out = errno;
++        CHROMIUM_LOG(WARNING) << "Unexpected error probing process " << handle;
++        return mozilla::Some(ProcessStatus::Error);
++      }
++
++      // Wait and try again.
++      DCHECK(blocking == BlockingWait::Yes);
++      struct timespec delay = {(kDelayMS / 1000),
++                               (kDelayMS % 1000) * 1000 * 1000};
++      HANDLE_EINTR(nanosleep(&delay, &delay));
+     }
+ 
+-    auto result =
+-        forkService->SendWaitPid(handle, blocking == BlockingWait::Yes);
+-    if (result.isOk()) {
+-      return mozilla::Some(handleStatus(result.unwrap().status));
+-    }
+-
+-    int err = result.unwrapErr();
+-    if (err == ECHILD) {
+-      return mozilla::Nothing();
+-    }
+-
+-    *info_out = err;
+-    return mozilla::Some(err == 0 ? ProcessStatus::Running
+-                                  : ProcessStatus::Error);
++    *info_out = ETIME;  // "Timer expired"; close enough.
++    return mozilla::Some(ProcessStatus::Error);
+ #else
+     return mozilla::Nothing();
+ #endif
+@@ -256,6 +359,10 @@ ProcessStatus WaitForProcess(ProcessHandle handle, BlockingWait blocking,
+   const int maybe_wnohang = (blocking == BlockingWait::No) ? WNOHANG : 0;
+ 
+ #ifdef HAVE_WAITID
++#ifdef XP_MACOSX
++  //10.8 and higher have a working waitid, broken on 10.7 and lower
++  if (__builtin_available(macOS 10.8, *)) {
++#endif
+   // We use `WNOWAIT` to read the process status without
+   // side-effecting it, in case it's something unexpected like a
+   // ptrace-stop for the crash reporter.  If is an exit, the call is
+@@ -270,8 +377,7 @@ ProcessStatus WaitForProcess(ProcessHandle handle, BlockingWait blocking,
+       return *forkServerReturn;
+     }
+ 
+-    CHROMIUM_LOG(INFO) << "waitid failed pid:" << handle
+-                       << " errno:" << wait_err;
++    CHROMIUM_LOG(ERROR) << "waitid failed pid:" << handle << " errno:" << errno;
+     *info_out = wait_err;
+     return ProcessStatus::Error;
+   }
+@@ -322,26 +428,67 @@ ProcessStatus WaitForProcess(ProcessHandle handle, BlockingWait blocking,
+   DCHECK(si.si_code == old_si_code);
+   return status;
+ 
+-#else   // no waitid
++#ifdef XP_MACOSX
++  } else {
++    //use the exact same code jed put below for openbsd, for 10.7 and lower
++    //it's redundant, but nothing else we can do.
++    int status;
++    const int result = waitpid(handle, &status, maybe_wnohang);
++    if (result == -1) {
++      *info_out = errno;
++      if (auto forkServerReturn = handleForkServer()) {
++        return *forkServerReturn;
++      }
++
++      CHROMIUM_LOG(ERROR) << "waitpid failed pid:" << handle
++                          << " errno:" << errno;
++      return ProcessStatus::Error;
++    }
++    if (result == 0) {
++      return ProcessStatus::Running;
++    }
++
++    if (WIFEXITED(status)) {
++      *info_out = WEXITSTATUS(status);
++      return ProcessStatus::Exited;
++    }
++    if (WIFSIGNALED(status)) {
++      *info_out = WTERMSIG(status);
++      return ProcessStatus::Killed;
++    }
++    LOG_AND_ASSERT << "unexpected wait status: " << status;
++    return ProcessStatus::Error;
++  }
++#endif
++#else  // no waitid
+ 
+   int status;
+   const int result = waitpid(handle, &status, maybe_wnohang);
+   if (result == -1) {
+-    int wait_err = errno;
++    *info_out = errno;
+     if (auto forkServerReturn = handleForkServer()) {
+       return *forkServerReturn;
+     }
+ 
+-    CHROMIUM_LOG(INFO) << "waitpid failed pid:" << handle
+-                       << " errno:" << wait_err;
+-    *info_out = wait_err;
++    CHROMIUM_LOG(ERROR) << "waitpid failed pid:" << handle
++                        << " errno:" << errno;
+     return ProcessStatus::Error;
+   }
+   if (result == 0) {
+     return ProcessStatus::Running;
+   }
+ 
+-  return handleStatus(status);
++  if (WIFEXITED(status)) {
++    *info_out = WEXITSTATUS(status);
++    return ProcessStatus::Exited;
++  }
++  if (WIFSIGNALED(status)) {
++    *info_out = WTERMSIG(status);
++    return ProcessStatus::Killed;
++  }
++  LOG_AND_ASSERT << "unexpected wait status: " << status;
++  return ProcessStatus::Error;
++
+ #endif  // waitid
+ }
+ 
+diff --git a/ipc/chromium/src/chrome/common/ipc_channel.cc b/ipc/chromium/src/chrome/common/ipc_channel.cc
+index 9ecc883268b..dcca3dc12f2 100644
+--- a/ipc/chromium/src/chrome/common/ipc_channel.cc
++++ b/ipc/chromium/src/chrome/common/ipc_channel.cc
+@@ -14,9 +14,12 @@
+ #else
+ #  include "chrome/common/ipc_channel_posix.h"
+ #endif
++//it ain't workin. sorry nika
++/*
+ #ifdef XP_DARWIN
+ #  include "chrome/common/ipc_channel_mach.h"
+ #endif
++*/
+ 
+ namespace IPC {
+ 
+@@ -37,7 +40,8 @@ already_AddRefed<Channel> Channel::Create(ChannelHandle pipe, Mode mode,
+                                                 other_pid);
+ #endif
+   }
+-#if XP_DARWIN
++//it ain't workin. sorry nika
++/*#if XP_DARWIN
+   if (auto* receive = std::get_if<mozilla::UniqueMachReceiveRight>(&pipe)) {
+     return mozilla::MakeAndAddRef<ChannelMach>(std::move(*receive), nullptr,
+                                                mode, other_pid);
+@@ -47,6 +51,7 @@ already_AddRefed<Channel> Channel::Create(ChannelHandle pipe, Mode mode,
+                                                other_pid);
+   }
+ #endif
++*/
+   MOZ_ASSERT_UNREACHABLE("unhandled pipe type");
+   return nullptr;
+ }
+diff --git a/ipc/chromium/src/chrome/common/ipc_channel.h b/ipc/chromium/src/chrome/common/ipc_channel.h
+index a1120675fd2..7199b2e4916 100644
+--- a/ipc/chromium/src/chrome/common/ipc_channel.h
++++ b/ipc/chromium/src/chrome/common/ipc_channel.h
+@@ -39,10 +39,12 @@ class Channel {
+   // endpoints may be passed around directly using IPC messages.
+   using ChannelHandle =
+       std::variant<std::monostate, mozilla::UniqueFileHandle
+-#if defined(XP_DARWIN)
++//it ain't workin. sorry nika
++/*#if defined(XP_DARWIN)
+                    ,
+                    mozilla::UniqueMachSendRight, mozilla::UniqueMachReceiveRight
+ #endif
++*/
+                    >;
+ 
+   // Implemented by consumers of a Channel to receive messages.
+diff --git a/ipc/chromium/src/chrome/common/ipc_channel_posix.cc b/ipc/chromium/src/chrome/common/ipc_channel_posix.cc
+index ff65fadad3c..6324c90e667 100644
+--- a/ipc/chromium/src/chrome/common/ipc_channel_posix.cc
++++ b/ipc/chromium/src/chrome/common/ipc_channel_posix.cc
+@@ -1086,12 +1086,14 @@ bool ChannelPosix::AcceptMachPorts(Message& msg) {
+ // required information for AcceptMachPorts to the message footer. See comment
+ // above for details.
+ bool ChannelPosix::TransferMachPorts(Message& msg) {
++//it ain't working sorry nika
++/*
+   uint32_t num_receive_rights = msg.num_receive_rights();
+   if (num_receive_rights != 0) {
+     CHROMIUM_LOG(ERROR) << "ChannelPosix does not support receive rights";
+     return false;
+   }
+-
++*/
+   uint32_t num_send_rights = msg.num_send_rights();
+   if (num_send_rights == 0) {
+     return true;
+diff --git a/ipc/chromium/src/chrome/common/ipc_message.cc b/ipc/chromium/src/chrome/common/ipc_message.cc
+index 20e34691569..4f376989454 100644
+--- a/ipc/chromium/src/chrome/common/ipc_message.cc
++++ b/ipc/chromium/src/chrome/common/ipc_message.cc
+@@ -188,6 +188,8 @@ uint32_t Message::num_send_rights() const {
+   return attached_send_rights_.Length();
+ }
+ 
++//it ain't working sorry nika
++/*
+ bool Message::WriteMachReceiveRight(mozilla::UniqueMachReceiveRight port) {
+   uint32_t index = attached_receive_rights_.Length();
+   WriteUInt32(index);
+@@ -216,6 +218,7 @@ bool Message::ConsumeMachReceiveRight(
+ uint32_t Message::num_receive_rights() const {
+   return attached_receive_rights_.Length();
+ }
++*/
+ #endif
+ 
+ bool Message::WillBeRoutedExternally(
+diff --git a/ipc/chromium/src/chrome/common/ipc_message.h b/ipc/chromium/src/chrome/common/ipc_message.h
+index 0e15558c5d9..1d79f78f2ca 100644
+--- a/ipc/chromium/src/chrome/common/ipc_message.h
++++ b/ipc/chromium/src/chrome/common/ipc_message.h
+@@ -339,6 +339,8 @@ class Message : public mojo::core::ports::UserMessage, public Pickle {
+ 
+   uint32_t num_send_rights() const;
+ 
++  //it ain't workin sorry nika
++  /*
+   bool WriteMachReceiveRight(mozilla::UniqueMachReceiveRight port);
+ 
+   // WARNING: This method is marked as `const` so it can be called when
+@@ -347,6 +349,7 @@ class Message : public mojo::core::ports::UserMessage, public Pickle {
+                                mozilla::UniqueMachReceiveRight* port) const;
+ 
+   uint32_t num_receive_rights() const;
++  */
+ #endif
+ 
+ #ifdef FUZZING_SNAPSHOT
+@@ -416,6 +419,8 @@ class Message : public mojo::core::ports::UserMessage, public Pickle {
+   // deserializing a message.
+   mutable nsTArray<mozilla::UniqueMachSendRight> attached_send_rights_;
+ 
++  //it ain't workin sorry nika
++  /*
+   // The set of mach receive rights which are attached to this message.
+   //
+   // Mutable, as this array can be mutated during `ConsumeMachReceiveRight` when
+@@ -426,6 +431,7 @@ class Message : public mojo::core::ports::UserMessage, public Pickle {
+   // being processed, which may be used by the system to temporarily boost the
+   // QoS for this process.
+   mozilla::UniqueMachSendRight mach_voucher_;
++  */
+ #endif
+ 
+   // Total size of buffers which should have been sent in shared memory, but had
+diff --git a/ipc/chromium/src/chrome/common/ipc_message_utils.h b/ipc/chromium/src/chrome/common/ipc_message_utils.h
+index 326d9ce8c4d..13ccec8670b 100644
+--- a/ipc/chromium/src/chrome/common/ipc_message_utils.h
++++ b/ipc/chromium/src/chrome/common/ipc_message_utils.h
+@@ -123,10 +123,12 @@ class MOZ_STACK_CLASS MessageWriter final {
+   bool WriteMachSendRight(mozilla::UniqueMachSendRight port) {
+     return message_.WriteMachSendRight(std::move(port));
+   }
+-
++  //it ain't workin sorry nika
++  /*
+   bool WriteMachReceiveRight(mozilla::UniqueMachReceiveRight port) {
+     return message_.WriteMachReceiveRight(std::move(port));
+   }
++  */
+ #endif
+ 
+   void FatalError(const char* aErrorMsg) const {
+@@ -222,10 +224,13 @@ class MOZ_STACK_CLASS MessageReader final {
+     return message_.ConsumeMachSendRight(&iter_, port);
+   }
+ 
++  //it ain't workin sorry nika
++  /*
+   [[nodiscard]] bool ConsumeMachReceiveRight(
+       mozilla::UniqueMachReceiveRight* port) {
+     return message_.ConsumeMachReceiveRight(&iter_, port);
+   }
++  */
+ #endif
+ 
+   void FatalError(const char* aErrorMsg) const {
+@@ -1118,6 +1123,8 @@ struct ParamTraitsIPC<mozilla::UniqueMachSendRight> {
+   }
+ };
+ 
++//it ain't workin sorry nbika
++/*
+ // `UniqueMachReceiveRight` may be serialized over IPC channels. On the
+ // receiving side, the UniqueMachReceiveRight is the local name of the right
+ // which was transmitted.
+@@ -1159,7 +1166,7 @@ struct ParamTraitsIPC<mozilla::UniqueMachReceiveRight> {
+     }
+     return true;
+   }
+-};
++};*/
+ #endif
+ 
+ // Mozilla-specific types.
+diff --git a/ipc/chromium/src/chrome/common/mach_ipc_mac.cc b/ipc/chromium/src/chrome/common/mach_ipc_mac.cc
+index 42591ec129f..115af6fe8b0 100644
+--- a/ipc/chromium/src/chrome/common/mach_ipc_mac.cc
++++ b/ipc/chromium/src/chrome/common/mach_ipc_mac.cc
+@@ -225,8 +225,11 @@ MachHandleProcessCheckIn(
+     return Err(LaunchError("invalid child process check-in message format"));
+   }
+ 
++  //instead of calling audit_token_to_pid, we simply compare the sixth member
++  //as shown by the openBSM group's patch:
++  //https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/openbsm/bsm-add-audit_token_to_pid.patch
+   // Ensure the message was sent by the newly spawned child process.
+-  if (audit_token_to_pid(request.trailer.msgh_audit) != child_pid) {
++  if (((pid_t) request.trailer.msgh_audit.val[5]) != child_pid) {
+     CHROMIUM_LOG(ERROR) << "task_t was not sent by child process";
+     return Err(LaunchError("audit_token_to_pid"));
+   }
+diff --git a/ipc/glue/GeckoChildProcessHost.cpp b/ipc/glue/GeckoChildProcessHost.cpp
+index 83241df4d05..bf70b3b494c 100644
+--- a/ipc/glue/GeckoChildProcessHost.cpp
++++ b/ipc/glue/GeckoChildProcessHost.cpp
+@@ -1232,9 +1232,9 @@ Result<Ok, LaunchError> PosixProcessLauncher::DoSetup() {
+     nsCString new_dyld_lib_path(path.get());
+     if (PR_GetEnv("MOZ_RUN_GTEST")) {
+       new_dyld_lib_path = path + "/gtest:"_ns + new_dyld_lib_path;
+-      mLaunchOptions->env_map["DYLD_LIBRARY_PATH"] = new_dyld_lib_path.get();
+     }
+ 
++    mLaunchOptions->env_map["DYLD_LIBRARY_PATH"] = new_dyld_lib_path.get();
+     // DYLD_INSERT_LIBRARIES is currently unused by default but we allow
+     // it to be set by the external environment.
+     const char* interpose = PR_GetEnv("DYLD_INSERT_LIBRARIES");
+@@ -1894,6 +1894,8 @@ RefPtr<ProcessLaunchPromise> BaseProcessLauncher::Launch(
+     if (auto* handle = std::get_if<UniqueFileHandle>(&clientHandle)) {
+       geckoargs::sIPCHandle.Put(std::move(*handle), mChildArgs);
+     }
++// it ain't workin sorry nika
++/**
+ #ifdef XP_DARWIN
+     // NOTE: We don't support passing UniqueMachReceiveRight instances on the
+     // command line, so clientHandle must be a send right.
+@@ -1901,6 +1903,7 @@ RefPtr<ProcessLaunchPromise> BaseProcessLauncher::Launch(
+       geckoargs::sIPCPort.Put(std::move(*port), mChildArgs);
+     }
+ #endif
++*/
+     else {
+       MOZ_ASSERT_UNREACHABLE();
+       return ProcessLaunchPromise::CreateAndReject(LaunchError("BadPipeType"),
+diff --git a/ipc/glue/IOThread.cpp b/ipc/glue/IOThread.cpp
+index 5fc52e50c8c..c55b2e8136a 100644
+--- a/ipc/glue/IOThread.cpp
++++ b/ipc/glue/IOThread.cpp
+@@ -15,9 +15,6 @@
+ #if defined(XP_WIN)
+ #  include "chrome/common/ipc_channel_win.h"
+ #else
+-#  if defined(XP_DARWIN)
+-#    include "chrome/common/ipc_channel_mach.h"
+-#  endif
+ #  include "chrome/common/ipc_channel_posix.h"
+ #endif
+ 
+@@ -84,11 +81,14 @@ IOThreadParent::IOThreadParent() : IOThread("IPC I/O Parent") {
+ #if defined(XP_WIN)
+     return &IPC::ChannelWin::sKind;
+ #else
++//it ain't working sorry nika
++/*
+ #  if defined(XP_DARWIN)
+     if (Preferences::GetBool("dom.ipc.backend.mach")) {
+       return &IPC::ChannelMach::sKind;
+     }
+ #  endif
++*/
+     return &IPC::ChannelPosix::sKind;
+ #endif
+   }();
+-- 
+2.53.0
+

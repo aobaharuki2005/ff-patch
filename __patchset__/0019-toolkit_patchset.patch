@@ -1,0 +1,496 @@
+From edc2caa6c7c50f2b5ff9db6a197646076c634205 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Fri, 17 Apr 2026 08:07:54 +0700
+Subject: [PATCH 19/26] toolkit_patchset
+
+---
+ toolkit/components/browser/nsWebBrowser.cpp   |  11 +-
+ .../components/remote/nsMacRemoteServer.mm    |   4 +-
+ .../components/telemetry/pingsender/moz.build |   2 +
+ toolkit/moz.configure                         |   2 +-
+ toolkit/xre/GeckoArgs.h                       |   4 +-
+ toolkit/xre/MacApplicationDelegate.mm         | 108 ++++++++++++++++--
+ toolkit/xre/MacLaunchHelper.mm                |  54 +++++----
+ toolkit/xre/MacRunFromDmgUtils.mm             |  19 ++-
+ toolkit/xre/MacUtils.mm                       |   9 +-
+ toolkit/xre/nsEmbedFunctions.cpp              |   3 +
+ toolkit/xre/nsNativeAppSupportCocoa.mm        |   2 +-
+ 11 files changed, 168 insertions(+), 50 deletions(-)
+
+diff --git a/toolkit/components/browser/nsWebBrowser.cpp b/toolkit/components/browser/nsWebBrowser.cpp
+index 7a881a6d9f7..26bc040eca6 100644
+--- a/toolkit/components/browser/nsWebBrowser.cpp
++++ b/toolkit/components/browser/nsWebBrowser.cpp
+@@ -918,7 +918,6 @@ nsWebBrowser::SetPositionAndSize(int32_t aX, int32_t aY, int32_t aCX,
+   int32_t doc_y = aY;
+ 
+   // We also need to resize our widget then.
+-  // Now reposition/ resize the doc
+   NS_ENSURE_SUCCESS(
+       mDocShell->SetPositionAndSize(doc_x, doc_y, aCX, aCY, aFlags),
+       NS_ERROR_FAILURE);
+@@ -998,15 +997,21 @@ nsWebBrowser::SetVisibility(bool aVisibility) {
+ }
+ 
+ NS_IMETHODIMP
+-nsWebBrowser::GetEnabled(bool* aEnabled) { return NS_ERROR_FAILURE; }
++nsWebBrowser::GetEnabled(bool* aEnabled) {
++  return NS_ERROR_FAILURE;
++}
+ 
+ NS_IMETHODIMP
+-nsWebBrowser::SetEnabled(bool aEnabled) { return NS_ERROR_FAILURE; }
++nsWebBrowser::SetEnabled(bool aEnabled) {
++  return NS_ERROR_FAILURE;
++}
+ 
+ NS_IMETHODIMP
+ nsWebBrowser::GetMainWidget(nsIWidget** aMainWidget) {
+   NS_ENSURE_ARG_POINTER(aMainWidget);
++
+   NS_IF_ADDREF(*aMainWidget = mParentWidget);
++
+   return NS_OK;
+ }
+ 
+diff --git a/toolkit/components/remote/nsMacRemoteServer.mm b/toolkit/components/remote/nsMacRemoteServer.mm
+index d43e03a5f56..743b9b3e9c9 100644
+--- a/toolkit/components/remote/nsMacRemoteServer.mm
++++ b/toolkit/components/remote/nsMacRemoteServer.mm
+@@ -39,7 +39,7 @@ void nsMacRemoteServer::HandleCommandLine(CFDataRef aData) {
+     NSDictionary* dict =
+         [NSKeyedUnarchiver unarchiveObjectWithData:(NSData*)aData];
+     if (dict && [dict isKindOfClass:[NSDictionary class]]) {
+-      NSArray* args = dict[@"args"];
++      NSArray* args = [dict objectForKey:@"args"];
+       if (!args) {
+         NS_ERROR("Wrong parameters passed to the Remote Server");
+         return;
+@@ -71,7 +71,7 @@ void nsMacRemoteServer::HandleCommandLine(CFDataRef aData) {
+       // in the current instance.
+       cmdLine->Run();
+ 
+-      NSNumber* raise = dict[@"raise"];
++      NSNumber* raise = [dict objectForKey:@"raise"];
+       if (!raise || [raise boolValue]) {
+         // Activating the application brings the most recent window to the
+         // foreground.
+diff --git a/toolkit/components/telemetry/pingsender/moz.build b/toolkit/components/telemetry/pingsender/moz.build
+index e3526f4c349..03c38cbbcfc 100644
+--- a/toolkit/components/telemetry/pingsender/moz.build
++++ b/toolkit/components/telemetry/pingsender/moz.build
+@@ -32,6 +32,8 @@ else:
+         "pingsender_unix_common.cpp",
+     ]
+ 
++if CONFIG["OS_ARCH"] == "Darwin":
++    LDFLAGS += ["-Wl,-rpath,@executable_path/./"]
+ 
+ # Don't use the STL wrappers; we don't link with -lmozalloc, and it really
+ # doesn't matter here anyway.
+diff --git a/toolkit/moz.configure b/toolkit/moz.configure
+index 44b91b7bb3e..54dbcfa6e98 100644
+--- a/toolkit/moz.configure
++++ b/toolkit/moz.configure
+@@ -2819,7 +2819,7 @@ def wasm_sandboxing_libraries():
+ @depends(dependable(wasm_sandboxing_libraries), build_project, target)
+ def default_wasm_sandboxing_libraries(libraries, build_project, target):
+     if build_project != "tools/rusttests" and target.endianness == "little":
+-        non_default_libs = {}
++        non_default_libs = {"soundtouch"}
+ 
+         return tuple(l for l in libraries if l not in non_default_libs)
+ 
+diff --git a/toolkit/xre/GeckoArgs.h b/toolkit/xre/GeckoArgs.h
+index 2b91bdd1060..f63a9ef887c 100644
+--- a/toolkit/xre/GeckoArgs.h
++++ b/toolkit/xre/GeckoArgs.h
+@@ -209,10 +209,12 @@ static CommandLineArg<const char*> sAppOmni{"-appomni", "appomni"};
+ static CommandLineArg<const char*> sProfile{"-profile", "profile"};
+ 
+ static CommandLineArg<UniqueFileHandle> sIPCHandle{"-ipcHandle", "ipchandle"};
++//it ain't workin sorry nika 
++/*
+ #if defined(XP_DARWIN)
+ static CommandLineArg<UniqueMachSendRight> sIPCPort{"-ipcPort", "ipcport"};
+ #endif
+-
++*/
+ static CommandLineArg<mozilla::ipc::ReadOnlySharedMemoryHandle> sJsInitHandle{
+     "-jsInitHandle", "jsinithandle"};
+ static CommandLineArg<mozilla::ipc::ReadOnlySharedMemoryHandle> sPrefsHandle{
+diff --git a/toolkit/xre/MacApplicationDelegate.mm b/toolkit/xre/MacApplicationDelegate.mm
+index b7db9890d96..cec132b117c 100644
+--- a/toolkit/xre/MacApplicationDelegate.mm
++++ b/toolkit/xre/MacApplicationDelegate.mm
+@@ -41,6 +41,7 @@
+ #include "nsCommandLine.h"
+ #include "nsStandaloneNativeMenu.h"
+ #include "nsCocoaUtils.h"
++#include "nsCocoaFeatures.h"
+ #include "nsMenuBarX.h"
+ #include "mozilla/NeverDestroyed.h"
+ 
+@@ -72,6 +73,7 @@ enum class LaunchStatus {
+ 
+ static LaunchStatus sLaunchStatus = LaunchStatus::Initial;
+ 
++
+ static nsTArray<nsCString>& StartupURLs() {
+   static mozilla::NeverDestroyed<nsTArray<nsCString>> sStartupURLs;
+   return *sStartupURLs;
+@@ -128,8 +130,7 @@ void SetupMacApplicationDelegate(bool* gRestartedByOS) {
+   MOZ_ASSERT(
+       sLaunchStatus == LaunchStatus::Initial,
+       "Launch status should be in intial state when setting up delegate");
+-  sLaunchStatus = LaunchStatus::DelegateIsSetup;
+-
++    sLaunchStatus = LaunchStatus::DelegateIsSetup;
+   NS_OBJC_END_TRY_IGNORE_BLOCK;
+ }
+ 
+@@ -139,15 +140,14 @@ void SetupMacApplicationDelegate(bool* gRestartedByOS) {
+ // (b) Collect URLs that were provided to the app at open time.
+ void InitializeMacApp() {
+   if (sLaunchStatus != LaunchStatus::DelegateIsSetup) {
+-    // Delegate has not been set up or NSApp has been launched already.
++      // Delegate has not been set up or NSApp has been launched already.
+     return;
+   }
+-
+   sLaunchStatus = LaunchStatus::CollectingURLs;
+   if (!gfxPlatform::IsHeadless()) {
+     [NSApp run];
+   }
+-  sLaunchStatus = LaunchStatus::CollectedURLs;
++  sLaunchStatus = LaunchStatus::CollectedURLs; 
+ }
+ 
+ nsTArray<nsCString> TakeStartupURLs() { return std::move(StartupURLs()); }
+@@ -162,6 +162,24 @@ nsTArray<nsCString> TakeStartupURLs() { return std::move(StartupURLs()); }
+   NS_OBJC_BEGIN_TRY_BLOCK_RETURN;
+ 
+   if ((self = [super init])) {
++    if (!nsCocoaFeatures::OnHighSierraOrLater()) {
++      NSAppleEventManager* aeMgr = [NSAppleEventManager sharedAppleEventManager];
++
++      [aeMgr setEventHandler:self
++                 andSelector:@selector(handleAppleEvent:withReplyEvent:)
++               forEventClass:kInternetEventClass
++                  andEventID:kAEGetURL];
++
++      [aeMgr setEventHandler:self
++                 andSelector:@selector(handleAppleEvent:withReplyEvent:)
++               forEventClass:'WWW!'
++                  andEventID:'OURL'];
++
++      [aeMgr setEventHandler:self
++                 andSelector:@selector(handleAppleEvent:withReplyEvent:)
++               forEventClass:kCoreEventClass
++                  andEventID:kAEOpenDocuments];
++   }
+     if (![NSApp windowsMenu]) {
+       // If the application has a windows menu, it will keep it up to date and
+       // prepend the window list to the Dock menu automatically.
+@@ -175,6 +193,23 @@ nsTArray<nsCString> TakeStartupURLs() { return std::move(StartupURLs()); }
+   NS_OBJC_END_TRY_BLOCK_RETURN(nil);
+ }
+ 
++- (void)dealloc {
++  if(!nsCocoaFeatures::OnHighSierraOrLater()) {
++    NS_OBJC_BEGIN_TRY_IGNORE_BLOCK;
++
++    NSAppleEventManager* aeMgr = [NSAppleEventManager sharedAppleEventManager];
++    [aeMgr removeEventHandlerForEventClass:kInternetEventClass
++                                andEventID:kAEGetURL];
++    [aeMgr removeEventHandlerForEventClass:'WWW!' andEventID:'OURL'];
++    [aeMgr removeEventHandlerForEventClass:kCoreEventClass
++                                andEventID:kAEOpenDocuments];
++    [super dealloc];
++
++    NS_OBJC_END_TRY_IGNORE_BLOCK;
++  }
++}
++
++
+ // The method that NSApplication calls upon a request to reopen, such as when
+ // the Dock icon is clicked and no windows are open. A "visible" window may be
+ // miniaturized, so we can't skip nsCocoaNativeReOpen() if 'flag' is 'true'.
+@@ -332,14 +367,19 @@ nsTArray<nsCString> TakeStartupURLs() { return std::move(StartupURLs()); }
+ 
+ - (BOOL)application:(NSApplication*)application
+     continueUserActivity:(NSUserActivity*)userActivity
++#if defined(MAC_OS_X_VERSION_10_14) && \
++    MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+       restorationHandler:
+           (void (^)(NSArray<id<NSUserActivityRestoring>>*))restorationHandler {
+-  if (![userActivity.activityType
+-          isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+-    return NO;
++#else
++      restorationHandler:(void (^)(NSArray*))restorationHandler {
++#endif
++    if (![userActivity.activityType
++            isEqualToString:NSUserActivityTypeBrowsingWeb]) {
++      return NO;
+   }
+ 
+-  return [self openURLs:@[ userActivity.webpageURL ]];
++  return [self openURLs:@[userActivity.webpageURL]];
+ }
+ 
+ - (void)application:(NSApplication*)application
+@@ -348,6 +388,55 @@ nsTArray<nsCString> TakeStartupURLs() { return std::move(StartupURLs()); }
+   NSLog(@"Failed to continue user activity %@: %@", userActivityType, error);
+ }
+ 
++// opened. It will be called once for each selected document.
++- (BOOL)application:(NSApplication*)theApplication
++           openFile:(NSString*)filename {
++  if(nsCocoaFeatures::OnHighSierraOrLater())
++    return false;
++
++  NS_OBJC_BEGIN_TRY_BLOCK_RETURN;
++  return [self openURLs:((NSArray<NSURL*>*) @[filename])];
++  NS_OBJC_END_TRY_BLOCK_RETURN(NO);
++}
++
++- (void)handleAppleEvent:(NSAppleEventDescriptor*)event
++          withReplyEvent:(NSAppleEventDescriptor*)replyEvent {
++  if (!event) return;
++
++  AutoAutoreleasePool pool;
++
++  bool isGetURLEvent = ([event eventClass] == kInternetEventClass &&
++                        [event eventID] == kAEGetURL);
++
++  if (isGetURLEvent ||
++      ([event eventClass] == 'WWW!' && [event eventID] == 'OURL')) {
++    NSString* urlString =
++        [[event paramDescriptorForKeyword:keyDirectObject] stringValue];
++    NSURL* url = [NSURL URLWithString:urlString];
++
++    [self openURLs:@[url]];
++  } else if ([event eventClass] == kCoreEventClass &&
++             [event eventID] == kAEOpenDocuments) {
++    NSAppleEventDescriptor* fileListDescriptor =
++        [event paramDescriptorForKeyword:keyDirectObject];
++    if (!fileListDescriptor) return;
++
++    // Descriptor list indexing is one-based...
++    NSInteger numberOfFiles = [fileListDescriptor numberOfItems];
++    for (NSInteger i = 1; i <= numberOfFiles; i++) {
++      NSString* urlString =
++          [[fileListDescriptor descriptorAtIndex:i] stringValue];
++      if (!urlString) continue;
++
++      // We need a path, not a URL
++      NSURL* url = [NSURL URLWithString:urlString];
++      if (!url) continue;
++
++      [self application:NSApp openFile:[url path]];
++    }
++  }
++}
++
+ - (BOOL)openURLs:(NSArray<NSURL*>*)urls {
+   nsTArray<const char*> args([urls count] * 2 + 2);
+   // Placeholder for unused program name.
+@@ -395,5 +484,4 @@ nsTArray<nsCString> TakeStartupURLs() { return std::move(StartupURLs()); }
+ 
+   return YES;
+ }
+-
+ @end
+diff --git a/toolkit/xre/MacLaunchHelper.mm b/toolkit/xre/MacLaunchHelper.mm
+index d75abeff8cc..0edf788caaa 100644
+--- a/toolkit/xre/MacLaunchHelper.mm
++++ b/toolkit/xre/MacLaunchHelper.mm
+@@ -61,29 +61,37 @@ void LaunchMacAppWithBundle(NSString* aBundlePath, NSArray* aArguments) {
+     StripQuarantineBit(launchPath);
+     RegisterAppWithLaunchServices(launchPath);
+ 
++    if(@available(macOS 10.15, *)) {
+     // We use NSWorkspace to register the application into the
+     // `TALAppsToRelaunchAtLogin` list and allow for macOS session resume.
+     // This API only works with `.app`s.
+     __block dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+-    NSWorkspaceOpenConfiguration* config =
+-        [NSWorkspaceOpenConfiguration configuration];
+-    [config setArguments:aArguments];
+-    [config setCreatesNewApplicationInstance:YES];
+-    [config setEnvironment:[[NSProcessInfo processInfo] environment]];
++      NSWorkspaceOpenConfiguration* config =
++          [NSWorkspaceOpenConfiguration configuration];
++      [config setArguments:aArguments];
++      [config setCreatesNewApplicationInstance:YES];
++      [config setEnvironment:[[NSProcessInfo processInfo] environment]];
+ 
+-    [[NSWorkspace sharedWorkspace]
+-        openApplicationAtURL:[NSURL fileURLWithPath:launchPath]
+-               configuration:config
+-           completionHandler:^(NSRunningApplication* aChild, NSError* aError) {
+-             if (aError) {
+-               NSLog(@"LaunchMacApp: Failed to run application. Error: %@",
+-                     aError);
+-             }
+-             dispatch_semaphore_signal(semaphore);
+-           }];
++      [[NSWorkspace sharedWorkspace]
++          openApplicationAtURL:[NSURL fileURLWithPath:launchPath]
++                 configuration:config
++             completionHandler:^(NSRunningApplication* aChild, NSError* aError) {
++               if (aError) {
++                 NSLog(@"LaunchMacApp: Failed to run application. Error: %@",
++                       aError);
++               }
++               dispatch_semaphore_signal(semaphore);
++             }];
++      // We use a semaphore to wait for the application to launch.
++      dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
++    } else {
++      NSError *error=nil;
++      [[NSWorkspace sharedWorkspace] launchApplicationAtURL:[NSBundle mainBundle].bundleURL
++                                                    options:NSWorkspaceLaunchAsync|NSWorkspaceLaunchNewInstance
++                                              configuration:@{NSWorkspaceLaunchConfigurationArguments:aArguments, NSWorkspaceLaunchConfigurationEnvironment:[[NSProcessInfo processInfo] environment]}
++                                                      error:&error];
+ 
+-    // We use a semaphore to wait for the application to launch.
+-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
++      }
+   } @catch (NSException* e) {
+     NSLog(@"%@: %@", e.name, e.reason);
+   }
+@@ -100,11 +108,17 @@ void LaunchChildMac(int aArgc, char** aArgv, pid_t* aPid) {
+     for (int i = 1; i < aArgc; i++) {
+       [arguments addObject:[NSString stringWithUTF8String:aArgv[i]]];
+     }
++
+     NSTask* task = [[NSTask alloc] init];
+-    [task setExecutableURL:[NSURL fileURLWithPath:launchPath]];
+-    [task setArguments:arguments];
+     NSError* error = nil;
+-    [task launchAndReturnError:&error];
++    [task setArguments:arguments];
++    if(@available(macOS 10.13, *)) {
++      [task setExecutableURL:[NSURL fileURLWithPath:launchPath]];
++      [task launchAndReturnError:&error];
++    } else {
++      [task setLaunchPath:launchPath];
++      [task launch];
++    }
+     if (!error && aPid) {
+       *aPid = [task processIdentifier];
+       [task waitUntilExit];
+diff --git a/toolkit/xre/MacRunFromDmgUtils.mm b/toolkit/xre/MacRunFromDmgUtils.mm
+index 2a296c5256f..a5882aabf50 100644
+--- a/toolkit/xre/MacRunFromDmgUtils.mm
++++ b/toolkit/xre/MacRunFromDmgUtils.mm
+@@ -13,9 +13,8 @@
+ #include <sys/mount.h>
+ #include <sys/param.h>
+ 
+-#include "MacLaunchHelper.h"
+ #include "MacRunFromDmgUtils.h"
+-#include "MacUtils.h"
++#include "MacLaunchHelper.h"
+ 
+ #include "mozilla/ErrorResult.h"
+ #include "mozilla/intl/Localization.h"
+@@ -37,9 +36,6 @@
+ // https://developer.apple.com/documentation/iokit
+ // https://developer.apple.com/library/archive/documentation/DeviceDrivers/Conceptual/IOKitFundamentals/
+ 
+-using namespace mozilla::MacUtils;
+-using namespace mozilla::MacLaunchHelper;
+-
+ namespace mozilla::MacRunFromDmgUtils {
+ 
+ /**
+@@ -265,19 +261,22 @@ static void ShowInstallFailedDialog() {
+ #ifdef MOZ_UPDATER
+ bool LaunchElevatedDmgInstall(NSString* aBundlePath, NSArray* aArguments) {
+   NSTask* task = [[NSTask alloc] init];
+-  [task setExecutableURL:[NSURL fileURLWithPath:aBundlePath]];
+   if (aArguments) {
+     [task setArguments:aArguments];
+   }
+-  [task launchAndReturnError:nil];
+-
++  if (@available(macOS 10.13, *)) {
++    [task setExecutableURL:[NSURL fileURLWithPath:aBundlePath]];
++    [task launchAndReturnError:nil];
++  } else {
++    [task setLaunchPath:aBundlePath];
++    [task launch];
++  }
+   bool didSucceed = InstallPrivilegedHelper();
+   [task waitUntilExit];
+   [task release];
+   if (!didSucceed) {
+-    AbortElevatedUpdate();
++      AbortElevatedUpdate();
+   }
+-
+   return didSucceed;
+ }
+ #endif
+diff --git a/toolkit/xre/MacUtils.mm b/toolkit/xre/MacUtils.mm
+index f0e42ab91ae..27525706e4e 100644
+--- a/toolkit/xre/MacUtils.mm
++++ b/toolkit/xre/MacUtils.mm
+@@ -17,11 +17,16 @@ void LaunchTask(NSString* aPath, NSArray* aArguments) {
+ 
+   @try {
+     NSTask* task = [[NSTask alloc] init];
+-    [task setExecutableURL:[NSURL fileURLWithPath:aPath]];
+     if (aArguments) {
+       [task setArguments:aArguments];
+     }
+-    [task launchAndReturnError:nil];
++    if(@available(macOS 10.13, *)) {
++      [task setExecutableURL:[NSURL fileURLWithPath:aPath]];
++      [task launchAndReturnError:nil];
++    } else {
++      [task setLaunchPath:aPath];
++      [task launch];
++    }
+     [task waitUntilExit];
+     [task release];
+   } @catch (NSException* e) {
+diff --git a/toolkit/xre/nsEmbedFunctions.cpp b/toolkit/xre/nsEmbedFunctions.cpp
+index c822fe29648..ab270ccbc3b 100644
+--- a/toolkit/xre/nsEmbedFunctions.cpp
++++ b/toolkit/xre/nsEmbedFunctions.cpp
+@@ -441,12 +441,15 @@ nsresult XRE_InitChildProcess(int aArgc, char* aArgv[],
+ 
+   Maybe<IPC::Channel::ChannelHandle> clientChannel =
+       geckoargs::sIPCHandle.Get(aArgc, aArgv);
++//it ain't workin sorry nika
++/*
+ #ifdef XP_DARWIN
+   MOZ_ASSERT_IF(clientChannel, !geckoargs::sIPCPort.IsPresent(aArgc, aArgv));
+   if (!clientChannel) {
+     clientChannel = geckoargs::sIPCPort.Get(aArgc, aArgv);
+   }
+ #endif
++*/
+   if (NS_WARN_IF(!clientChannel)) {
+     return NS_ERROR_FAILURE;
+   }
+diff --git a/toolkit/xre/nsNativeAppSupportCocoa.mm b/toolkit/xre/nsNativeAppSupportCocoa.mm
+index 6476bf21465..e556e28ab40 100644
+--- a/toolkit/xre/nsNativeAppSupportCocoa.mm
++++ b/toolkit/xre/nsNativeAppSupportCocoa.mm
+@@ -72,7 +72,7 @@ NS_IMETHODIMP nsNativeAppSupportCocoa::Start(bool* _retval) {
+   // alert here.  But the alert's message and buttons would require custom
+   // localization.  So (for now at least) we just log an English message
+   // to the console before quitting.
+-  if (major < 10 || (major == 10 && minor < 12)) {
++  if (major < 10 || (major == 10 && minor < 7)) {
+     NSLog(@"Minimum OS version requirement not met!");
+     return NS_OK;
+   }
+-- 
+2.53.0
+

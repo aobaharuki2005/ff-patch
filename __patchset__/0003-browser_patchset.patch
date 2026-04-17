@@ -1,0 +1,71 @@
+From 8dd9305a73dd5aaf10e09ece23fbb8fffc174957 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Fri, 17 Apr 2026 08:02:15 +0700
+Subject: [PATCH 03/26] browser_patchset
+
+---
+ browser/app/macbuild/Contents/Info.plist.in | 2 +-
+ browser/app/moz.build                       | 1 +
+ browser/modules/SharingUtils.sys.mjs        | 4 ++++
+ browser/themes/osx/browser.css              | 5 +++++
+ 4 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/browser/app/macbuild/Contents/Info.plist.in b/browser/app/macbuild/Contents/Info.plist.in
+index ea28831b906..b95f7a18ae7 100644
+--- a/browser/app/macbuild/Contents/Info.plist.in
++++ b/browser/app/macbuild/Contents/Info.plist.in
+@@ -253,7 +253,7 @@
+ 	<key>LSFileQuarantineEnabled</key>
+ 	<true/>
+ 	<key>LSMinimumSystemVersion</key>
+-	<string>10.15.0</string>
++	<string>10.6.0</string>
+   <key>NSSupportsAutomaticGraphicsSwitching</key>
+   <true/>
+   <key>NSRequiresAquaSystemAppearance</key>
+diff --git a/browser/app/moz.build b/browser/app/moz.build
+index 7a94cc4f903..97970a55176 100644
+--- a/browser/app/moz.build
++++ b/browser/app/moz.build
+@@ -118,6 +118,7 @@ if CONFIG["OS_ARCH"] == "Darwin":
+     OS_LIBS += [
+         "-framework CoreFoundation",
+     ]
++    LDFLAGS += ["-Wl,-rpath,@executable_path/./"]
+ 
+ if CONFIG["MOZ_SANDBOX"] and CONFIG["OS_ARCH"] == "WINNT":
+     # For sandbox includes and the include dependencies those have
+diff --git a/browser/modules/SharingUtils.sys.mjs b/browser/modules/SharingUtils.sys.mjs
+index c2469494dca..2d1c043a141 100644
+--- a/browser/modules/SharingUtils.sys.mjs
++++ b/browser/modules/SharingUtils.sys.mjs
+@@ -26,6 +26,10 @@ class SharingUtilsCls {
+   updateShareURLMenuItem(browser, insertAfterEl) {
+     if (!Services.prefs.getBoolPref("browser.menu.share_url.allow", true)) {
+       return;
++    } else if (AppConstants.platform == "macosx") {
++      if (!AppConstants.isPlatformAndVersionAtLeast("macosx", "12")) {
++        return;
++      }
+     }
+ 
+     let shareURL = insertAfterEl.nextElementSibling;
+diff --git a/browser/themes/osx/browser.css b/browser/themes/osx/browser.css
+index c2091513702..32ef93f99f8 100644
+--- a/browser/themes/osx/browser.css
++++ b/browser/themes/osx/browser.css
+@@ -54,6 +54,11 @@
+   }
+ }
+ 
++#titlebar-fullscreen-button {
++  appearance: auto;
++  -moz-default-appearance: -moz-mac-fullscreen-button;
++}
++
+ /** End titlebar **/
+ 
+ :root[chromehidden~="toolbar"][chromehidden~="location"][chromehidden~="directories"] {
+-- 
+2.53.0
+
