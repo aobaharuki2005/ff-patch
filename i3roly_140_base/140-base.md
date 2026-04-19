@@ -1,0 +1,279 @@
+# Scenario
+- Action: merge
+- Source: ref-143-base-dynasty
+- Base: ref-143-base-upstream
+
+# Added files
+        new file:   dom/media/RLBoxSoundTouch.cpp
+        new file:   dom/media/RLBoxSoundTouch.h
+        new file:   dom/media/RLBoxSoundTouchTypes.h
+        new file:   dom/media/platforms/apple/AppleCMFunctions.h
+        new file:   dom/media/platforms/apple/AppleCMLinker.cpp
+        new file:   dom/media/platforms/apple/AppleCMLinker.h
+        new file:   dom/media/platforms/apple/AppleCVLinker.cpp
+        new file:   dom/media/platforms/apple/AppleCVLinker.h
+        new file:   dom/media/platforms/apple/AppleVDADecoder.cpp
+        new file:   dom/media/platforms/apple/AppleVDADecoder.h
+        new file:   dom/media/platforms/apple/AppleVDAFunctions.h
+        new file:   dom/media/platforms/apple/AppleVDALinker.cpp
+        new file:   dom/media/platforms/apple/AppleVDALinker.h
+        new file:   dom/media/platforms/apple/AppleVTFunctions.h
+        new file:   dom/media/platforms/apple/AppleVTLinker.cpp
+        new file:   dom/media/platforms/apple/AppleVTLinker.h
+        new file:   media/libsoundtouch/src/sources.mozbuild
+        new file:   security/manager/ssl/osclientcerts/dynamic-library/moz.build
+        new file:   security/manager/ssl/osclientcerts/dynamic-library/osclientcerts.symbols
+        new file:   security/manager/ssl/osclientcerts/dynamic-library/stub.cpp
+        new file:   security/manager/ssl/osclientcerts/moz.build
+        new file:   widget/cocoa/SDKDeclarations.h
+        new file:   widget/cocoa/nsChildView.mm
+        new file:   widget/cocoa/nsTouchBarNativeAPIDefines.h
+
+# Conflict Classification
+
+| Label | Ý nghĩa |
+|---|---|
+| `SHIM` | Thêm compatibility shim/polyfill |
+| `ALIAS` | Symbol/API aliasing |
+| `FLOOR` | Deployment target floor adjustment |
+| `BUILD` | Build system / Makefile / moz.build |
+| `TOOLCHAIN` | Compiler/linker flag |
+| `REVERT` | Upstream change bị revert |
+| `NOVEL` | Logic mới không có upstream counterpart |
+| `SYNTAX` | Thay đổi phong cách viết code/cú pháp để phù hợp với giới hạn của compiler hoặc runtime cũ mà không làm thay đổi logic thực thi của chương trình. |
+| `GUARD` | Guard by macOS versions |
+| `CHECKSUM` | CHECKSUM |
+
+
+# List of conflicts
+
+19042026 ....+7: 22/262
+
+        both added:      accessible/mac/MOXAccessibleBase.mm
+        both added:      accessible/mac/MOXTextMarkerDelegate.mm
+        both added:      accessible/mac/mozAccessible.mm
+        both added:      accessible/xpcom/xpcAccessibleMacInterface.mm
+        both added:      browser/app/macbuild/Contents/Info.plist.in
+        both added:      browser/modules/SharingUtils.sys.mjs
+        both added:      browser/themes/osx/browser.css
+        both added:      build/gyp.mozbuild
+        both added:      config/external/rlbox/rlbox_config.h
+        both added:      config/external/rlbox_wasm2c_sandbox/rlbox_wasm2c_thread_locals.cpp
+        both added:      config/recurse.mk
+        both added:      config/rules.mk
+        both added:      dom/canvas/WebGLContext.cpp
+        both added:      dom/canvas/WebGLContext.h
+        both added:      dom/canvas/WebGLContextTextures.cpp
+        both added:      dom/canvas/WebGLContextValidate.cpp
+        both added:      dom/ipc/ProcessHangMonitor.cpp
+        both added:      dom/media/mediasink/moz.build
+        both added:      dom/media/moz.build
+        both added:      dom/media/platforms/apple/AppleDecoderModule.cpp
+        both added:      dom/media/platforms/apple/AppleDecoderModule.h
+        both added:      dom/media/platforms/apple/AppleVTDecoder.cpp
+        both added:      dom/media/platforms/apple/AppleVTDecoder.h
+        both added:      dom/media/platforms/apple/AppleVTEncoder.cpp
+        both added:      dom/media/platforms/moz.build
+        both added:      dom/media/systemservices/objc_video_capture/device_info_avfoundation.mm
+        both added:      dom/media/systemservices/objc_video_capture/video_capture_avfoundation.mm
+        both added:      dom/system/mac/nsOSPermissionRequest.mm
+        both added:      dom/webauthn/MacOSWebAuthnService.mm
+        both added:      gfx/2d/DrawTargetCairo.cpp
+        both added:      gfx/2d/MacIOSurface.cpp
+        both added:      gfx/2d/NativeFontResourceMac.cpp
+        both added:      gfx/2d/NativeFontResourceMac.h
+        both added:      gfx/2d/ScaledFontMac.cpp
+        both added:      gfx/gl/GLContext.cpp
+        both added:      gfx/gl/GLContext.h
+        both added:      gfx/gl/GLContextProviderCGL.mm
+        both added:      gfx/layers/MacIOSurfaceImage.cpp
+        both added:      gfx/layers/NativeLayerCA.mm
+        both added:      gfx/layers/ipc/CompositorBridgeChild.cpp
+        both added:      gfx/layers/ipc/CompositorBridgeChild.h
+        both added:      gfx/layers/opengl/CompositorOGL.cpp
+        both added:      gfx/layers/wr/WebRenderLayerManager.cpp
+        both added:      gfx/layers/wr/WebRenderLayerManager.h
+        both added:      gfx/skia/skia/src/core/SkScalerContext.h
+        both added:      gfx/skia/skia/src/core/SkStrikeCache.cpp
+        both added:      gfx/skia/skia/src/ports/SkScalerContext_mac_ct.cpp
+        both added:      gfx/skia/skia/src/ports/SkTypeface_mac_ct.cpp
+        both added:      gfx/skia/skia/src/sksl/SkSLDefines.h
+        both added:      gfx/skia/skia/src/sksl/SkSLPool.cpp
+        both added:      gfx/skia/skia/src/utils/mac/SkCTFont.cpp
+        both added:      gfx/skia/skia/src/utils/mac/SkCTFontCreateExactCopy.cpp
+        both added:      gfx/skia/skia/src/utils/mac/SkCreateCGImageRef.cpp
+        both added:      gfx/thebes/CoreTextFontList.cpp
+        both added:      gfx/thebes/CoreTextFontList.h
+        both added:      gfx/thebes/gfxCoreTextShaper.cpp
+        both added:      gfx/thebes/gfxCoreTextShaper.h
+        both added:      gfx/thebes/gfxFontEntry.cpp
+        both added:      gfx/thebes/gfxGraphiteShaper.cpp
+        both added:      gfx/thebes/gfxGraphiteShaper.h
+        both added:      gfx/thebes/gfxMacFont.cpp
+        both added:      gfx/thebes/gfxMacPlatformFontList.h
+        both added:      gfx/thebes/gfxMacPlatformFontList.mm
+        both added:      gfx/thebes/gfxMacUtils.cpp
+        both added:      gfx/thebes/gfxPlatform.cpp
+        both added:      gfx/thebes/gfxPlatformMac.cpp
+        both added:      gfx/wr/wr_glyph_rasterizer/src/platform/macos/font.rs
+        both added:      image/decoders/icon/mac/nsIconChannelCocoa.mm
+        both added:      ipc/app/moz.build
+        both added:      ipc/chromium/src/base/process_util.h
+        both added:      ipc/chromium/src/base/process_util_mac.mm
+        both added:      ipc/chromium/src/base/process_util_posix.cc
+        both added:      ipc/chromium/src/chrome/common/mach_ipc_mac.cc
+        both added:      ipc/glue/GeckoChildProcessHost.cpp
+        both added:      js/src/jit/ProcessExecutableMemory.cpp
+        both added:      layout/base/nsDocumentViewer.cpp
+        both added:      layout/base/nsLayoutUtils.cpp
+        both added:      layout/generic/nsContainerFrame.cpp
+        both added:      layout/generic/nsIFrame.cpp
+        both added:      media/libjpeg/simd/x86_64/jsimd.c
+        both added:      media/libsoundtouch/moz-libsoundtouch.patch
+        both added:      media/libsoundtouch/moz.yaml
+        both added:      media/libsoundtouch/src/RLBoxSoundTouchFactory.h
+        both added:      media/libsoundtouch/src/STTypes.h
+        both added:      media/libsoundtouch/src/SoundTouch.h
+        both added:      media/libsoundtouch/src/SoundTouchFactory.cpp
+        both added:      media/libsoundtouch/src/SoundTouchFactory.h
+        both added:      media/libsoundtouch/src/moz.build
+        both added:      memory/build/Mutex.cpp
+        both added:      memory/build/Mutex.h
+        both added:      mfbt/RandomNum.cpp
+        both added:      modules/libpref/init/StaticPrefList.yaml
+        both added:      mozglue/baseprofiler/core/Flow.cpp
+        both added:      mozglue/misc/AwakeTimeStamp.cpp
+        both added:      mozglue/misc/Mutex_posix.cpp
+        both added:      mozglue/misc/Now.cpp
+        both added:      mozglue/static/rust/build.rs
+        both added:      mozglue/static/rust/lib.rs
+        both added:      netwerk/protocol/http/MicrosoftEntraSSOUtils.mm
+        both added:      netwerk/test/http3server/moz.build
+        both added:      python/mozboot/mozboot/osx.py
+        both added:      python/mozboot/mozboot/util.py
+        both added:      python/mozbuild/mozbuild/test/configure/macos_fake_sdk/SDKSettings.plist
+        both added:      python/mozbuild/mozbuild/test/configure/test_toolchain_configure.py
+        both added:      security/certverifier/NSSCertDBTrustDomain.cpp
+        both added:      security/manager/ssl/osclientcerts/Cargo.toml
+        both added:      security/manager/ssl/osclientcerts/src/backend_macos.rs
+        both added:      security/manager/ssl/osclientcerts/src/bindings_macos.rs
+        both added:      security/rlbox/moz.build
+        both added:      security/sandbox/common/test/SandboxTestingChildTests.h
+        both added:      security/sandbox/mac/Sandbox.mm
+        both added:      security/sandbox/mac/SandboxPolicyContent.h
+        both added:      security/sandbox/mac/SandboxPolicyGMP.h
+        both added:      security/sandbox/mac/SandboxPolicyRDD.h
+        both added:      security/sandbox/mac/SandboxPolicySocket.h
+        both added:      security/sandbox/mac/SandboxPolicyUtility.h
+        both added:      servo/components/style/values/specified/box.rs
+        both added:      servo/components/style/values/specified/color.rs
+        both added:      third_party/libwebrtc/sdk/objc/base/RTCVideoCapturer.h
+        both added:      third_party/libwebrtc/sdk/objc/components/capturer/RTCCameraVideoCapturer.h
+        both added:      third_party/libwebrtc/sdk/objc/components/capturer/RTCCameraVideoCapturer.m
+        both added:      third_party/libwebrtc/sdk/objc/helpers/RTCDispatcher.m
+        both added:      third_party/rlbox/include/rlbox_noop_sandbox.hpp
+        both added:      third_party/rlbox_wasm2c_sandbox/include/rlbox_wasm2c_tls.hpp
+        both added:      third_party/rust/cc/.cargo-checksum.json
+        both added:      third_party/rust/cc/src/lib.rs
+        both added:      third_party/rust/coreaudio-sys-utils/.cargo-checksum.json
+        both added:      third_party/rust/coreaudio-sys-utils/src/dispatch.rs
+        both added:      third_party/rust/cubeb-coreaudio/.cargo-checksum.json
+        both added:      third_party/rust/cubeb-coreaudio/src/backend/device_property.rs
+        both added:      third_party/rust/cubeb-coreaudio/src/backend/mod.rs
+        both added:      third_party/rust/cubeb-coreaudio/src/backend/tests/interfaces.rs
+        both added:      third_party/rust/cubeb-coreaudio/src/lib.rs
+        both added:      third_party/rust/getrandom/.cargo-checksum.json
+        both added:      third_party/rust/getrandom/src/backends.rs
+        both added:      third_party/rust/getrandom/src/backends/getentropy.rs
+        both added:      third_party/rust/getrandom/src/util_libc.rs
+        both added:      third_party/rust/metal/.cargo-checksum.json
+        both added:      third_party/rust/metal/Cargo.toml
+        both added:      third_party/rust/metal/src/argument.rs
+        both added:      third_party/rust/metal/src/blitpass.rs
+        both added:      third_party/rust/metal/src/computepass.rs
+        both added:      third_party/rust/metal/src/device.rs
+        both added:      third_party/rust/metal/src/pipeline/compute.rs
+        both added:      third_party/rust/metal/src/pipeline/mod.rs
+        both added:      third_party/rust/metal/src/pipeline/render.rs
+        both added:      third_party/rust/metal/src/renderpass.rs
+        both added:      third_party/rust/metal/src/vertexdescriptor.rs
+        both added:      third_party/rust/neqo-bin/.cargo-checksum.json
+        both added:      third_party/rust/neqo-bin/Cargo.toml
+        both added:      third_party/rust/neqo-udp/.cargo-checksum.json
+        both added:      third_party/rust/neqo-udp/Cargo.toml
+        both added:      third_party/rust/quinn-udp/.cargo-checksum.json
+        both added:      third_party/rust/quinn-udp/Cargo.toml
+        both added:      third_party/rust/zeitstempel/.cargo-checksum.json
+        both added:      third_party/rust/zeitstempel/Cargo.lock
+        both added:      third_party/rust/zeitstempel/Cargo.toml
+        both added:      third_party/rust/zeitstempel/src/mac.rs
+        both added:      third_party/wasm2c/src/wast-parser.cc
+        both added:      toolkit/components/kvstore/src/fs.rs
+        both added:      toolkit/components/printing/content/printPreview.css
+        both added:      toolkit/components/remote/nsMacRemoteServer.mm
+        both added:      toolkit/moz.configure
+        both added:      toolkit/xre/MacApplicationDelegate.mm
+        both added:      toolkit/xre/MacLaunchHelper.mm
+        both added:      toolkit/xre/MacRunFromDmgUtils.mm
+        both added:      toolkit/xre/MacUtils.mm
+        both added:      toolkit/xre/nsNativeAppSupportCocoa.mm
+        both added:      tools/profiler/core/platform.cpp
+        both added:      uriloader/exthandler/mac/nsOSHelperAppService.mm
+        both added:      widget/InitData.h
+        both added:      widget/LookAndFeel.h
+        both added:      widget/TextRecognition.cpp
+        both added:      widget/cocoa/GfxInfo.mm
+        both added:      widget/cocoa/MacThemeGeometryType.h
+        both added:      widget/cocoa/MediaHardwareKeysEventSourceMacMediaCenter.mm
+        both added:      widget/cocoa/MediaKeysEventSourceFactory.cpp
+        both added:      widget/cocoa/NativeKeyBindings.mm
+        both added:      widget/cocoa/NativeMenuMac.mm
+        both added:      widget/cocoa/OSXNotificationCenter.h
+        both added:      widget/cocoa/OSXNotificationCenter.mm
+        both added:      widget/cocoa/ScreenHelperCocoa.mm
+        both added:      widget/cocoa/TextInputHandler.h
+        both added:      widget/cocoa/TextInputHandler.mm
+        both added:      widget/cocoa/TextRecognition.mm
+        both added:      widget/cocoa/VibrancyManager.h
+        both added:      widget/cocoa/VibrancyManager.mm
+        both added:      widget/cocoa/ViewRegion.h
+        both added:      widget/cocoa/ViewRegion.mm
+        both added:      widget/cocoa/moz.build
+        both added:      widget/cocoa/nsAppShell.mm
+        both added:      widget/cocoa/nsChildView.h
+        both added:      widget/cocoa/nsClipboard.mm
+        both added:      widget/cocoa/nsCocoaFeatures.h
+        both added:      widget/cocoa/nsCocoaFeatures.mm
+        both added:      widget/cocoa/nsCocoaUtils.h
+        both added:      widget/cocoa/nsCocoaUtils.mm
+        both added:      widget/cocoa/nsCocoaWindow.h
+        both added:      widget/cocoa/nsCocoaWindow.mm
+        both added:      widget/cocoa/nsDragService.mm
+        both added:      widget/cocoa/nsLookAndFeel.h
+        both added:      widget/cocoa/nsLookAndFeel.mm
+        both added:      widget/cocoa/nsMacDockSupport.mm
+        both added:      widget/cocoa/nsMacFinderProgress.mm
+        both added:      widget/cocoa/nsMacSharingService.mm
+        both added:      widget/cocoa/nsMacUserActivityUpdater.mm
+        both added:      widget/cocoa/nsMenuX.mm
+        both added:      widget/cocoa/nsNativeThemeCocoa.h
+        both added:      widget/cocoa/nsNativeThemeCocoa.mm
+        both added:      widget/cocoa/nsNativeThemeColors.h
+        both added:      widget/cocoa/nsTouchBar.mm
+        both added:      widget/cocoa/nsTouchBarInput.mm
+        both added:      widget/cocoa/nsTouchBarUpdater.mm
+        both added:      widget/nsBaseWidget.cpp
+        both added:      widget/nsBaseWidget.h
+        both added:      widget/nsIWidget.h
+        both added:      widget/nsPrinterListCUPS.cpp
+        both added:      widget/nsXPLookAndFeel.cpp
+        both added:      xpcom/base/MacStringHelpers.mm
+        both added:      xpcom/base/nsMacPreferencesReader.mm
+        both added:      xpcom/io/CocoaFileUtils.mm
+        both added:      xpcom/threads/RWLock.h
+        both added:      xpcom/threads/nsThread.cpp
+        both added:      xpfe/appshell/AppWindow.cpp
+
+
+
+
