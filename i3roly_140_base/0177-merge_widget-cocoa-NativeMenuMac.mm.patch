@@ -1,0 +1,63 @@
+From b8a619298b0640a4a11ff85dda8345c2cc557d05 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:36:02 +0700
+Subject: [PATCH 177/246] merge_widget/cocoa/NativeMenuMac.mm
+
+---
+ widget/cocoa/NativeMenuMac.mm | 29 ++++++++++++++++++++---------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
+
+diff --git a/widget/cocoa/NativeMenuMac.mm b/widget/cocoa/NativeMenuMac.mm
+index 4539bf4fe3..96efae70b0 100644
+--- a/widget/cocoa/NativeMenuMac.mm
++++ b/widget/cocoa/NativeMenuMac.mm
+@@ -157,7 +157,9 @@ void NativeMenuMac::IconUpdated() {
+     if (menuImage) {
+       [menuImage setTemplate:YES];
+     }
+-    mContainerStatusBarItem.button.image = menuImage;
++    if(@available(macOS 10.10, *)) {
++      mContainerStatusBarItem.button.image = menuImage;
++    }
+   }
+ 
+   NS_OBJC_END_TRY_ABORT_BLOCK;
+@@ -255,18 +257,27 @@ void NativeMenuMac::ShowAsContextMenu(nsIFrame* aClickedFrame,
+ 
+   NSMenu* menu = mMenu->NativeNSMenu();
+   NSView* view = NativeViewForFrame(aClickedFrame);
+-  NSAppearance* appearance = NativeAppearanceForContent(mMenu->Content());
++  
+   NSPoint locationOnScreen = nsCocoaUtils::GeckoPointToCocoaPoint(desktopPoint);
+-
++  if(nsCocoaFeatures::OnMavericksOrLater()) {
++    NSAppearance* appearance = NativeAppearanceForContent(mMenu->Content());
++    mOpeningHandle = [MOZMenuOpeningCoordinator.sharedInstance
++        asynchronouslyOpenMenu:menu
++              atScreenPosition:locationOnScreen
++                       forView:view
++                withAppearance:appearance
++                 asContextMenu:aIsContextMenu];
++  } else {
++    mOpeningHandle = [MOZMenuOpeningCoordinator.sharedInstance
++        asynchronouslyOpenMenu:menu
++              atScreenPosition:locationOnScreen
++                       forView:view
++                withAppearance:nil
++                 asContextMenu:aIsContextMenu];
++    }
+   // Let the MOZMenuOpeningCoordinator do the actual opening, so that this
+   // ShowAsContextMenu call does not spawn a nested event loop, which would be
+   // surprising to our callers.
+-  mOpeningHandle = [MOZMenuOpeningCoordinator.sharedInstance
+-      asynchronouslyOpenMenu:menu
+-            atScreenPosition:locationOnScreen
+-                     forView:view
+-              withAppearance:appearance
+-               asContextMenu:aIsContextMenu];
+ }
+ 
+ bool NativeMenuMac::Close() {
+-- 
+2.53.0
+

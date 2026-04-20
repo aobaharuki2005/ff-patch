@@ -1,0 +1,31 @@
+From 3348fb20bbe669baeafb6357be13e09cbfec4d85 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:42:39 +0700
+Subject: [PATCH 226/246] merge_dom/media/platforms/apple/AppleCMFunctions.h
+
+---
+ dom/media/platforms/apple/AppleCMFunctions.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100644 dom/media/platforms/apple/AppleCMFunctions.h
+
+diff --git a/dom/media/platforms/apple/AppleCMFunctions.h b/dom/media/platforms/apple/AppleCMFunctions.h
+new file mode 100644
+index 0000000000..f81ce09723
+--- /dev/null
++++ b/dom/media/platforms/apple/AppleCMFunctions.h
+@@ -0,0 +1,12 @@
++/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
++/* vim:set ts=2 sw=2 sts=2 et cindent: */
++/* This Source Code Form is subject to the terms of the Mozilla Public
++ * License, v. 2.0. If a copy of the MPL was not distributed with this
++ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
++
++// Construct references to each of the CoreMedia symbols we use.
++
++LINK_FUNC(CMVideoFormatDescriptionCreate)
++LINK_FUNC(CMBlockBufferCreateWithMemoryBlock)
++LINK_FUNC(CMSampleBufferCreate)
++LINK_FUNC(CMTimeMake)
+-- 
+2.53.0
+

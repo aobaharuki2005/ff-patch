@@ -1,0 +1,35 @@
+From 0a4850e9571ddc5a4caa745d4e51407a606735b9 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:33:33 +0700
+Subject: [PATCH 095/246] merge_mozglue/static/rust/build.rs
+
+---
+ mozglue/static/rust/build.rs | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/mozglue/static/rust/build.rs b/mozglue/static/rust/build.rs
+index 6a12ffbb1f..c505450f86 100644
+--- a/mozglue/static/rust/build.rs
++++ b/mozglue/static/rust/build.rs
+@@ -21,8 +21,16 @@ fn main() {
+     // code in tree, but the version here is such that it's effectively never used.
+     let max_alloc_error_panic_version = Version::parse("1.90.0-alpha").unwrap();
+ 
+-    println!("cargo::rustc-check-cfg=cfg(has_panic_hook_info)");
+-    println!("cargo::rustc-check-cfg=cfg(oom_with, values(\"hook\", \"alloc_error_panic\"))");
++    if ver >= Version::parse("1.80.0-alpha").unwrap() {
++        println!("cargo::rustc-check-cfg=cfg(has_panic_hook_info)");
++        println!("cargo::rustc-check-cfg=cfg(oom_with, values(\"hook\", \"alloc_error_panic\"))");
++    }
++    // As of 1.81, std::panic::PanicInfo is deprecated and replaced by
++    // std::panic::PanicHookInfo. Using the former becomes a warning in
++    // 1.82, but we can use the new type as of 1.81.
++    if ver >= Version::parse("1.81.0-beta").unwrap() {
++        println!("cargo:rustc-cfg=has_panic_hook_info");
++    }
+     if ver < max_oom_hook_version {
+         println!("cargo:rustc-cfg=oom_with=\"hook\"");
+     } else if ver < max_alloc_error_panic_version {
+-- 
+2.53.0
+

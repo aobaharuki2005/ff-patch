@@ -1,0 +1,28 @@
+From 9b524977b2aa560b88e5a6a401b419929153f1da Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:36:27 +0700
+Subject: [PATCH 191/246] merge_widget/cocoa/nsClipboard.mm
+
+---
+ widget/cocoa/nsClipboard.mm | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/widget/cocoa/nsClipboard.mm b/widget/cocoa/nsClipboard.mm
+index fa84de48fc..3465332a56 100644
+--- a/widget/cocoa/nsClipboard.mm
++++ b/widget/cocoa/nsClipboard.mm
+@@ -66,7 +66,10 @@ static NSPasteboard* GetPasteboard(
+     case nsIClipboard::kGlobalClipboard:
+       return [NSPasteboard generalPasteboard];
+     case nsIClipboard::kFindClipboard:
+-      return [NSPasteboard pasteboardWithName:NSPasteboardNameFind];
++      if (@available(macOS 10.13, *)) {
++          return [NSPasteboard pasteboardWithName:NSPasteboardNameFind];
++      }
++      return [NSPasteboard pasteboardWithName:NSFindPboard];
+     default:
+       return nil;
+   }
+-- 
+2.53.0
+

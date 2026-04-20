@@ -1,0 +1,34 @@
+From 9d80414eb642759732098539df57cc1672bf93f1 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:01 +0700
+Subject: [PATCH 140/246] merge_third_party/rust/metal/src/computepass.rs
+
+---
+ third_party/rust/metal/src/computepass.rs | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/third_party/rust/metal/src/computepass.rs b/third_party/rust/metal/src/computepass.rs
+index d3173e3d66..3c8d4b37fa 100644
+--- a/third_party/rust/metal/src/computepass.rs
++++ b/third_party/rust/metal/src/computepass.rs
+@@ -40,7 +40,7 @@ impl ComputePassSampleBufferAttachmentDescriptorArrayRef {
+         &self,
+         index: NSUInteger,
+     ) -> Option<&ComputePassSampleBufferAttachmentDescriptorRef> {
+-        unsafe { msg_send![self, objectAtIndexedSubscript: index] }
++        unsafe { msg_send![self, objectAtIndex: index] }
+     }
+ 
+     pub fn set_object_at(
+@@ -50,7 +50,7 @@ impl ComputePassSampleBufferAttachmentDescriptorArrayRef {
+     ) {
+         unsafe {
+             msg_send![self, setObject:attachment
+-                     atIndexedSubscript:index]
++                     atIndex:index]
+         }
+     }
+ }
+-- 
+2.53.0
+

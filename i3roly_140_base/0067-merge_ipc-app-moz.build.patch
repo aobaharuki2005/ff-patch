@@ -1,0 +1,29 @@
+From 28149ee4a04447131ceff373f2f929aa6fa4db23 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:32:53 +0700
+Subject: [PATCH 067/246] merge_ipc/app/moz.build
+
+---
+ ipc/app/moz.build | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/ipc/app/moz.build b/ipc/app/moz.build
+index afe1df122b..f9bfaa06d9 100644
+--- a/ipc/app/moz.build
++++ b/ipc/app/moz.build
+@@ -64,8 +64,10 @@ if CONFIG["OS_ARCH"] == "WINNT":
+     # we can enable it using a pref during testing.
+     LINK_FLAGS["CETCOMPAT"] = []
+ 
+-if CONFIG["OS_ARCH"] == "Darwin":
+-    LDFLAGS += ["-Wl,-rpath,@executable_path/../../../"]
++# reverting https://hg.mozilla.org/mozilla-unified/rev/1bc4ee894015268a6be66950b80705e73f17147e
++# because it hurts backwards compatibility
++#if CONFIG["OS_ARCH"] == "Darwin":
++#    LDFLAGS += ["-Wl,-rpath,@executable_path/../../../"]
+ 
+ if CONFIG["CC_TYPE"] == "clang-cl":
+     # Always enter a Windows program through wmain, whether or not we're
+-- 
+2.53.0
+

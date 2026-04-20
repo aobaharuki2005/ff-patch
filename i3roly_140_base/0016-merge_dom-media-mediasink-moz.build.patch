@@ -1,0 +1,25 @@
+From ca917a68321ff318d55e39017aa771f7c4e2a992 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:34 +0700
+Subject: [PATCH 016/246] merge_dom/media/mediasink/moz.build
+
+---
+ dom/media/mediasink/moz.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dom/media/mediasink/moz.build b/dom/media/mediasink/moz.build
+index e04bf24a25..0dfa35357b 100644
+--- a/dom/media/mediasink/moz.build
++++ b/dom/media/mediasink/moz.build
+@@ -17,7 +17,7 @@ EXPORTS += [
+ ]
+ 
+ LOCAL_INCLUDES += [
+-    "!/media/libsoundtouch/src",
++    "!/security/rlbox",
+     "/dom/media",
+ ]
+ 
+-- 
+2.53.0
+

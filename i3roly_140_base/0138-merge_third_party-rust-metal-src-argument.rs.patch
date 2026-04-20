@@ -1,0 +1,25 @@
+From aeee15454478756391f51b1c840d84754018a6fc Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:34:58 +0700
+Subject: [PATCH 138/246] merge_third_party/rust/metal/src/argument.rs
+
+---
+ third_party/rust/metal/src/argument.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/third_party/rust/metal/src/argument.rs b/third_party/rust/metal/src/argument.rs
+index d50051dd8f..76d7f34990 100644
+--- a/third_party/rust/metal/src/argument.rs
++++ b/third_party/rust/metal/src/argument.rs
+@@ -200,7 +200,7 @@ foreign_obj_type! {
+ 
+ impl StructMemberArrayRef {
+     pub fn object_at(&self, index: NSUInteger) -> Option<&StructMemberRef> {
+-        unsafe { msg_send![self, objectAtIndexedSubscript: index] }
++        unsafe { msg_send![self, objectAtIndex: index] }
+     }
+ 
+     pub fn count(&self) -> NSUInteger {
+-- 
+2.53.0
+

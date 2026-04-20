@@ -1,0 +1,37 @@
+From 5af88467821668936045f52b37d4df2ee8812a13 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:41 +0700
+Subject: [PATCH 167/246] merge_tools/profiler/core/platform.cpp
+
+---
+ tools/profiler/core/platform.cpp | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/tools/profiler/core/platform.cpp b/tools/profiler/core/platform.cpp
+index 6a4c408ca9..3ae8234341 100644
+--- a/tools/profiler/core/platform.cpp
++++ b/tools/profiler/core/platform.cpp
+@@ -7660,12 +7660,19 @@ void profiler_mark_thread_awake() {
+       currentPriority = threadInfo.Priority;
+     }
+   }
++#endif
++#if defined(GP_OS_darwin)
++  size_t qos_self_retval;
++  if(__builtin_available(macOS 10.10, *)) 
++    qos_self_retval = qos_class_self();
++  else
++    qos_self_retval = QOS_CLASS_UNSPECIFIED;
+ #endif
+   PROFILER_MARKER("Awake", OTHER, MarkerTiming::IntervalStart(), CPUAwakeMarker,
+                   0 /* CPU time */, cpuId
+ #if defined(GP_OS_darwin)
+                   ,
+-                  qos_class_self()
++                  qos_self_retval 
+ #endif
+ #if defined(GP_OS_windows)
+                       ,
+-- 
+2.53.0
+

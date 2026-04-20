@@ -1,0 +1,59 @@
+From 081b90cb7987001164e852f2afb5583a7d6786b3 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:28 +0700
+Subject: [PATCH 011/246] merge_dom/canvas/WebGLContext.cpp
+
+---
+ dom/canvas/WebGLContext.cpp | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/dom/canvas/WebGLContext.cpp b/dom/canvas/WebGLContext.cpp
+index a1fd6e7639..3dde233f2f 100644
+--- a/dom/canvas/WebGLContext.cpp
++++ b/dom/canvas/WebGLContext.cpp
+@@ -87,6 +87,11 @@
+ #include "WebGLValidateStrings.h"
+ #include "WebGLVertexArray.h"
+ 
++#ifdef MOZ_WIDGET_COCOA
++#  include "nsCocoaFeatures.h"
++#endif
++
++
+ #ifdef XP_WIN
+ #  include "WGLLibrary.h"
+ #endif
+@@ -732,6 +737,14 @@ void WebGLContext::FinishInit() {
+     }
+   }
+ 
++    mNeedsFakeNoStencil_UserFBs = false;
++#ifdef MOZ_WIDGET_COCOA
++  if (!nsCocoaFeatures::IsAtLeastVersion(10, 12) &&
++      gl->Vendor() == gl::GLVendor::Intel) {
++    mNeedsFakeNoStencil_UserFBs = true;
++  }
++#endif
++
+   mResetLayer = true;
+   mOptionsFrozen = true;
+ 
+@@ -1974,8 +1987,13 @@ ScopedDrawCallWrapper::ScopedDrawCallWrapper(WebGLContext& webgl)
+     }
+     driverDepthTest &= !mWebGL.mNeedsFakeNoDepth;
+     driverStencilTest &= !mWebGL.mNeedsFakeNoStencil;
+-  }
+-
++    } else {
++      if (mWebGL.mNeedsFakeNoStencil_UserFBs &&
++          fb->DepthAttachment().HasAttachment() &&
++          !fb->StencilAttachment().HasAttachment()) {
++        driverStencilTest = false;
++      }
++    }
+   const auto& gl = mWebGL.gl;
+   mWebGL.DoColorMask(Some(0), driverColorMask0);
+   if (mWebGL.mDriverDepthTest != driverDepthTest) {
+-- 
+2.53.0
+

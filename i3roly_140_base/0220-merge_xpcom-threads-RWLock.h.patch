@@ -1,0 +1,25 @@
+From 02a5685c0ae5a1387d56fca4a9ac74e1add00ee7 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:37:22 +0700
+Subject: [PATCH 220/246] merge_xpcom/threads/RWLock.h
+
+---
+ xpcom/threads/RWLock.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/xpcom/threads/RWLock.h b/xpcom/threads/RWLock.h
+index e03d008631..8b7c0c53bb 100644
+--- a/xpcom/threads/RWLock.h
++++ b/xpcom/threads/RWLock.h
+@@ -182,7 +182,7 @@ typedef BaseAutoTryWriteLock<RWLock> AutoTryWriteLock;
+ // calls to WriteLock() and WriteUnlock().
+ typedef BaseAutoWriteLock<RWLock> AutoWriteLock;
+ 
+-class MOZ_ONLY_USED_TO_AVOID_STATIC_CONSTRUCTORS MOZ_CAPABILITY("rwlock")
++class  MOZ_CAPABILITY("rwlock")
+     StaticRWLock {
+  public:
+   // In debug builds, check that mLock is initialized for us as we expect by
+-- 
+2.53.0
+

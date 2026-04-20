@@ -1,0 +1,46 @@
+From 3d6ace9380da862371018d0e8f733a56beec2d6f Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:44 +0700
+Subject: [PATCH 023/246] merge_dom/media/platforms/moz.build
+
+---
+ dom/media/platforms/moz.build | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/dom/media/platforms/moz.build b/dom/media/platforms/moz.build
+index 237cbc9f04..522a69de9c 100644
+--- a/dom/media/platforms/moz.build
++++ b/dom/media/platforms/moz.build
+@@ -89,15 +89,19 @@ if CONFIG["MOZ_APPLEMEDIA"]:
+     EXPORTS += [
+         "apple/AppleDecoderModule.h",
+         "apple/AppleEncoderModule.h",
+-        "apple/AppleUtils.h",
+     ]
+     UNIFIED_SOURCES += [
+         "apple/AppleATDecoder.cpp",
++        "apple/AppleCMLinker.cpp",
++        "apple/AppleCVLinker.cpp",
+         "apple/AppleDecoderModule.cpp",
+         "apple/AppleEncoderModule.cpp",
+-        "apple/AppleUtils.cpp",
++        'apple/AppleUtils.cpp',
++        'apple/AppleVDADecoder.cpp',
++        'apple/AppleVDALinker.cpp',
+         "apple/AppleVTDecoder.cpp",
+         "apple/AppleVTEncoder.cpp",
++        "apple/AppleVTLinker.cpp",
+     ]
+     LOCAL_INCLUDES += [
+         "/media/libyuv/libyuv/include",
+@@ -106,6 +110,7 @@ if CONFIG["MOZ_APPLEMEDIA"]:
+         "-framework AudioToolbox",
+         "-framework CoreMedia",
+         "-framework VideoToolbox",
++        "-framework VideoDecodeAcceleration",
+         # For some unknown reason, the documented method of using weak_import
+         # attribute doesn't work with VideoToolbox's functions.
+         # We want to lazily load _VTRegisterSupplementalVideoDecoderIfAvailable
+-- 
+2.53.0
+

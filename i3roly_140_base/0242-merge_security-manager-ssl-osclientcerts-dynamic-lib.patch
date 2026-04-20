@@ -1,0 +1,28 @@
+From 390daa8572b738539b4aa703d55cb30e83e336ab Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:42:59 +0700
+Subject: [PATCH 242/246] 
+ merge_security/manager/ssl/osclientcerts/dynamic-library/stub.cpp
+
+---
+ .../manager/ssl/osclientcerts/dynamic-library/stub.cpp    | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ create mode 100644 security/manager/ssl/osclientcerts/dynamic-library/stub.cpp
+
+diff --git a/security/manager/ssl/osclientcerts/dynamic-library/stub.cpp b/security/manager/ssl/osclientcerts/dynamic-library/stub.cpp
+new file mode 100644
+index 0000000000..bd20c15c4f
+--- /dev/null
++++ b/security/manager/ssl/osclientcerts/dynamic-library/stub.cpp
+@@ -0,0 +1,8 @@
++/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
++/* This Source Code Form is subject to the terms of the Mozilla Public
++ * License, v. 2.0. If a copy of the MPL was not distributed with this
++ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
++
++// This is an intentionally empty file. It is necessary for the build system to
++// successfully convert a static rust library into a dynamic library on
++// Windows.
+-- 
+2.53.0
+

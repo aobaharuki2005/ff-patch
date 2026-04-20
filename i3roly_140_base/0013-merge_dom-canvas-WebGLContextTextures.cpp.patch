@@ -1,0 +1,29 @@
+From 64045805ce8145fabf6b3264b74dfd5548187239 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:30 +0700
+Subject: [PATCH 013/246] merge_dom/canvas/WebGLContextTextures.cpp
+
+---
+ dom/canvas/WebGLContextTextures.cpp | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/dom/canvas/WebGLContextTextures.cpp b/dom/canvas/WebGLContextTextures.cpp
+index 2bc56f4b05..44ade52071 100644
+--- a/dom/canvas/WebGLContextTextures.cpp
++++ b/dom/canvas/WebGLContextTextures.cpp
+@@ -34,6 +34,12 @@
+ #include "WebGLTexelConversions.h"
+ #include "WebGLValidateStrings.h"
+ #include <algorithm>
++ 
++// needed to check if current OS is lower than 10.7
++#if defined(MOZ_WIDGET_COCOA)
++#  include "nsCocoaFeatures.h"
++#endif
++
+ 
+ #include "mozilla/DebugOnly.h"
+ #include "mozilla/dom/BindingUtils.h"
+-- 
+2.53.0
+

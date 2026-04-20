@@ -1,0 +1,33 @@
+From 19d6a6cdf00b3699e8816d5f5338e6f55b1369c8 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:33:02 +0700
+Subject: [PATCH 074/246] merge_layout/base/nsDocumentViewer.cpp
+
+---
+ layout/base/nsDocumentViewer.cpp | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/layout/base/nsDocumentViewer.cpp b/layout/base/nsDocumentViewer.cpp
+index 91255ff215..1d0bcfca09 100644
+--- a/layout/base/nsDocumentViewer.cpp
++++ b/layout/base/nsDocumentViewer.cpp
+@@ -3270,10 +3270,16 @@ bool nsDocumentViewer::ShouldAttachToTopLevel() {
+   if (nsIWidget::UsePuppetWidgets() || mParentWidget->IsPuppetWidget()) {
+     return true;
+   }
++
++  // TODO(emilio, bug 1919165): Unify this between macOS and other platforms?
++#ifdef XP_MACOSX
++  return false;
++#else
+ #ifdef DEBUG
+   nsIWidgetListener* parentListener = mParentWidget->GetWidgetListener();
+   MOZ_ASSERT(!parentListener || !parentListener->GetView(),
+              "Expect a top level widget");
++#endif
+ #endif
+   return true;
+ }
+-- 
+2.53.0
+

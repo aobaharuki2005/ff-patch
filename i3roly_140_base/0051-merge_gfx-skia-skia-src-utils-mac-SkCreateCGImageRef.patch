@@ -1,0 +1,26 @@
+From 9afa8de1db4e292be0f3544b480b3d225cac7e46 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:32:29 +0700
+Subject: [PATCH 051/246] 
+ merge_gfx/skia/skia/src/utils/mac/SkCreateCGImageRef.cpp
+
+---
+ gfx/skia/skia/src/utils/mac/SkCreateCGImageRef.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gfx/skia/skia/src/utils/mac/SkCreateCGImageRef.cpp b/gfx/skia/skia/src/utils/mac/SkCreateCGImageRef.cpp
+index c7d91d8889..4f5a09cf9a 100644
+--- a/gfx/skia/skia/src/utils/mac/SkCreateCGImageRef.cpp
++++ b/gfx/skia/skia/src/utils/mac/SkCreateCGImageRef.cpp
+@@ -292,7 +292,7 @@ sk_sp<SkColorSpace> SkMakeColorSpaceFromCGColorSpace(CGColorSpaceRef cgColorSpac
+     }
+ 
+     // Attempt to convert by parsing the ICC profile.
+-    SkUniqueCFRef<CFDataRef> iccData(CGColorSpaceCopyICCData(cgColorSpace));
++    SkUniqueCFRef<CFDataRef> iccData(CGColorSpaceCopyICCProfile(cgColorSpace));
+     if (!iccData) {
+         return nullptr;
+     }
+-- 
+2.53.0
+

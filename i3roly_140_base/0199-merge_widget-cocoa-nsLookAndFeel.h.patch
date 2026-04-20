@@ -1,0 +1,33 @@
+From 240619bdbbd10ddda056c5fa7c809c944075a159 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:36:43 +0700
+Subject: [PATCH 199/246] merge_widget/cocoa/nsLookAndFeel.h
+
+---
+ widget/cocoa/nsLookAndFeel.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/widget/cocoa/nsLookAndFeel.h b/widget/cocoa/nsLookAndFeel.h
+index 25d8aab950..86b77124f8 100644
+--- a/widget/cocoa/nsLookAndFeel.h
++++ b/widget/cocoa/nsLookAndFeel.h
+@@ -37,11 +37,15 @@ class nsLookAndFeel final : public nsXPLookAndFeel {
+   // chunk of telemetry logging code at initialization and when we
+   // recieve an event that changes the value of our telemetry probe.
+   static void RecordAccessibilityTelemetry();
+-
++  static bool UseOverlayScrollbars();
+  protected:
+   bool mInitialized = false;
+   bool mRtl = false;
+   int32_t mTitlebarHeight = 0;
++
++  static bool SystemWantsOverlayScrollbars();
++  static bool AllowOverlayScrollbarsOverlap();
++
+ };
+ 
+ #endif  // nsLookAndFeel_h_
+-- 
+2.53.0
+

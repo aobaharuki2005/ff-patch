@@ -1,0 +1,28 @@
+From 0b000bef6b2deb7bc1cda2cc80450799fcc76865 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:20 +0700
+Subject: [PATCH 005/246] merge_browser/themes/osx/browser.css
+
+---
+ browser/themes/osx/browser.css | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/browser/themes/osx/browser.css b/browser/themes/osx/browser.css
+index 29be501ded..4696bad18c 100644
+--- a/browser/themes/osx/browser.css
++++ b/browser/themes/osx/browser.css
+@@ -54,6 +54,11 @@
+   }
+ }
+ 
++#titlebar-fullscreen-button {
++  appearance: auto;
++  -moz-default-appearance: -moz-mac-fullscreen-button;
++}
++
+ /** End titlebar **/
+ 
+ :root[chromehidden~="toolbar"][chromehidden~="location"][chromehidden~="directories"] {
+-- 
+2.53.0
+

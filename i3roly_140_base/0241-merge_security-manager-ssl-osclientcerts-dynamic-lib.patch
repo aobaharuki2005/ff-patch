@@ -1,0 +1,21 @@
+From ab7e63953d47b790e43767d6c37ada363fe3e5f4 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:42:58 +0700
+Subject: [PATCH 241/246] 
+ merge_security/manager/ssl/osclientcerts/dynamic-library/osclientcerts.symbols
+
+---
+ .../ssl/osclientcerts/dynamic-library/osclientcerts.symbols      | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 security/manager/ssl/osclientcerts/dynamic-library/osclientcerts.symbols
+
+diff --git a/security/manager/ssl/osclientcerts/dynamic-library/osclientcerts.symbols b/security/manager/ssl/osclientcerts/dynamic-library/osclientcerts.symbols
+new file mode 100644
+index 0000000000..562ecea21d
+--- /dev/null
++++ b/security/manager/ssl/osclientcerts/dynamic-library/osclientcerts.symbols
+@@ -0,0 +1 @@
++C_GetFunctionList
+-- 
+2.53.0
+

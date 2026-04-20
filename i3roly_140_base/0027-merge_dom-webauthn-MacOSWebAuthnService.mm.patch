@@ -1,0 +1,25 @@
+From be906b6cfbc2466f184e9d8db6885c76bd2be5bb Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:49 +0700
+Subject: [PATCH 027/246] merge_dom/webauthn/MacOSWebAuthnService.mm
+
+---
+ dom/webauthn/MacOSWebAuthnService.mm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dom/webauthn/MacOSWebAuthnService.mm b/dom/webauthn/MacOSWebAuthnService.mm
+index 1c43967a52..5f82592b0c 100644
+--- a/dom/webauthn/MacOSWebAuthnService.mm
++++ b/dom/webauthn/MacOSWebAuthnService.mm
+@@ -1009,7 +1009,7 @@ MacOSWebAuthnService::GetAssertion(uint64_t aTransactionId,
+                 credentials) {
+           nsTArray<RefPtr<nsIWebAuthnAutoFillEntry>> autoFillEntries;
+           for (NSUInteger i = 0; i < credentials.count; i++) {
+-            const auto& credential = credentials[i];
++            const auto& credential = [credentials objectAtIndex:i];
+             nsAutoString userName;
+             nsCocoaUtils::GetStringForNSString(credential.name, userName);
+             nsAutoString rpId;
+-- 
+2.53.0
+

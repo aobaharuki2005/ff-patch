@@ -1,0 +1,42 @@
+From d047ded03bf15098e1322f806ef103239eea88c7 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:36 +0700
+Subject: [PATCH 017/246] merge_dom/media/moz.build
+
+---
+ dom/media/moz.build | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/dom/media/moz.build b/dom/media/moz.build
+index 73d244e0d2..e472d2a532 100644
+--- a/dom/media/moz.build
++++ b/dom/media/moz.build
+@@ -194,6 +194,8 @@ EXPORTS += [
+     "PrincipalHandle.h",
+     "QueueObject.h",
+     "ReaderProxy.h",
++    "RLBoxSoundTouch.h",
++    "RLBoxSoundTouchTypes.h",
+     "SeekJob.h",
+     "SeekTarget.h",
+     "SelfRef.h",
+@@ -308,6 +310,7 @@ UNIFIED_SOURCES += [
+     "MemoryBlockCache.cpp",
+     "QueueObject.cpp",
+     "ReaderProxy.cpp",
++    "RLBoxSoundTouch.cpp",
+     "SeekJob.cpp",
+     "TimeUnits.cpp",
+     "Tracing.cpp",
+@@ -355,7 +358,7 @@ EXTRA_JS_MODULES.media += [
+ ]
+ 
+ LOCAL_INCLUDES += [
+-    "!/media/libsoundtouch/src",
++    "!/security/rlbox",
+     "/caps",
+     "/docshell/base",
+     "/dom/base",
+-- 
+2.53.0
+

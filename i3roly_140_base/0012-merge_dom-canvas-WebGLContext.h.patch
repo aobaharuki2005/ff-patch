@@ -1,0 +1,24 @@
+From 8089d6364a58c708fb627f53c580cccf95d2fa9d Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:29 +0700
+Subject: [PATCH 012/246] merge_dom/canvas/WebGLContext.h
+
+---
+ dom/canvas/WebGLContext.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dom/canvas/WebGLContext.h b/dom/canvas/WebGLContext.h
+index 3c8f712b08..63ed2993e5 100644
+--- a/dom/canvas/WebGLContext.h
++++ b/dom/canvas/WebGLContext.h
+@@ -1273,6 +1273,7 @@ class WebGLContext : public VRefCounted, public SupportsWeakPtr {
+   bool mNeedsFakeNoAlpha = false;
+   bool mNeedsFakeNoDepth = false;
+   bool mNeedsFakeNoStencil = false;
++  bool mNeedsFakeNoStencil_UserFBs = false;
+ 
+   bool mDriverDepthTest = false;
+   bool mDriverStencilTest = false;
+-- 
+2.53.0
+

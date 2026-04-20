@@ -1,0 +1,46 @@
+From ee58a788672ad8c77aca383deb30f030a4baf717 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:33:23 +0700
+Subject: [PATCH 087/246] merge_memory/build/Mutex.cpp
+
+---
+ memory/build/Mutex.cpp | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/memory/build/Mutex.cpp b/memory/build/Mutex.cpp
+index 1450210293..29277de4ad 100644
+--- a/memory/build/Mutex.cpp
++++ b/memory/build/Mutex.cpp
+@@ -8,11 +8,28 @@
+ 
+ #include "mozilla/Assertions.h"
+ 
++bool Mutex::SpinInKernelSpace() {
++    //modify the condition to 10.12 so we use os_unfair_lock
++    //for all >10.12 systems. gsvelto used 10.15 because he
++    //attached another flag that is specific to 10.15.
++    //this change keeps everything simple and is a faithful
++    //rendition of the original author's implementation
++    if (__builtin_available(macOS 10.12 , *)) {
++        return true;
++    }
++
++    return false;
++}
++const bool Mutex::gSpinInKernelSpace = SpinInKernelSpace();
++
+ bool Mutex::TryLock() {
+ #if defined(XP_WIN)
+   return !!TryEnterCriticalSection(&mMutex);
+ #elif defined(XP_DARWIN)
+-  return os_unfair_lock_trylock(&mMutex);
++  if(__builtin_available(macOS 10.12, *))  
++  return os_unfair_lock_trylock(&mMutex.mUnfairLock);
++  else
++      return OSSpinLockTry(&mMutex.mSpinLock);
+ #else
+   switch (pthread_mutex_trylock(&mMutex)) {
+     case 0:
+-- 
+2.53.0
+

@@ -1,0 +1,86 @@
+From 6d3dcd7ac6fa9b8ba1b5cd1dde24f3eff343ca63 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:43:04 +0700
+Subject: [PATCH 246/246] merge_widget/cocoa/nsTouchBarNativeAPIDefines.h
+
+---
+ widget/cocoa/nsTouchBarNativeAPIDefines.h | 67 +++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
+ create mode 100644 widget/cocoa/nsTouchBarNativeAPIDefines.h
+
+diff --git a/widget/cocoa/nsTouchBarNativeAPIDefines.h b/widget/cocoa/nsTouchBarNativeAPIDefines.h
+new file mode 100644
+index 0000000000..1317a1bc79
+--- /dev/null
++++ b/widget/cocoa/nsTouchBarNativeAPIDefines.h
+@@ -0,0 +1,67 @@
++/* This Source Code Form is subject to the terms of the Mozilla Public
++ * License, v. 2.0. If a copy of the MPL was not distributed with this
++ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
++
++#ifndef nsTouchBarNativeAPIDefines_h
++#define nsTouchBarNativeAPIDefines_h
++
++#import <Cocoa/Cocoa.h>
++
++#if !defined(MAC_OS_X_VERSION_10_12_2) || MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_12_2
++@interface NSApplication (TouchBarMenu)
++- (IBAction)toggleTouchBarCustomizationPalette:(id)sender;
++@end
++
++typedef NSString* NSTouchBarItemIdentifier;
++__attribute__((weak_import))
++@interface NSTouchBarItem : NSObject
++@property(readonly) NSView* view;
++@property(readonly) NSString* customizationLabel;
++- (instancetype)initWithIdentifier:(NSTouchBarItemIdentifier)aIdentifier;
++@end
++
++@protocol NSSharingServicePickerTouchBarItemDelegate
++@end
++
++__attribute__((weak_import))
++@interface NSSharingServicePickerTouchBarItem : NSTouchBarItem
++@property(strong) id<NSSharingServicePickerTouchBarItemDelegate> delegate;
++@property(strong) NSImage* buttonImage;
++@end
++
++__attribute__((weak_import))
++@interface NSCustomTouchBarItem : NSTouchBarItem
++@property(strong) NSView* view;
++@property(strong) NSString* customizationLabel;
++@end
++
++@protocol NSTouchBarDelegate
++@end
++
++typedef NSString* NSTouchBarCustomizationIdentifier;
++__attribute__((weak_import))
++@interface NSTouchBar : NSObject
++@property(strong) NSArray<NSTouchBarItemIdentifier>* defaultItemIdentifiers;
++@property(strong) id<NSTouchBarDelegate> delegate;
++@property(strong) NSTouchBarCustomizationIdentifier customizationIdentifier;
++@property(strong) NSArray<NSTouchBarItemIdentifier>* customizationAllowedItemIdentifiers;
++- (NSTouchBarItem*)itemForIdentifier:(NSTouchBarItemIdentifier)aIdentifier;
++@end
++
++__attribute__((weak_import))
++@interface NSPopoverTouchBarItem : NSTouchBarItem
++@property(strong) NSString* customizationLabel;
++@property(strong) NSView* collapsedRepresentation;
++@property(strong) NSImage* collapsedRepresentationImage;
++@property(strong) NSString* collapsedRepresentationLabel;
++@property(strong) NSTouchBar* popoverTouchBar;
++@property BOOL showsCloseButton;
++- (void)showPopover:(id)sender;
++- (void)dismissPopover:(id)sender;
++@end
++
++@interface NSButton (TouchBarButton)
++@property(strong) NSColor* bezelColor;
++@end
++#endif  // !defined(MAC_OS_X_VERSION_10_12_2)
++#endif  // nsTouchBarNativeAPIDefines_h
+-- 
+2.53.0
+

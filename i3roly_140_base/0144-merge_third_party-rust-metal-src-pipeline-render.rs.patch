@@ -1,0 +1,43 @@
+From 2794d710f3b21011301509c701ad9cf47552673f Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:06 +0700
+Subject: [PATCH 144/246] merge_third_party/rust/metal/src/pipeline/render.rs
+
+---
+ third_party/rust/metal/src/pipeline/render.rs | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/third_party/rust/metal/src/pipeline/render.rs b/third_party/rust/metal/src/pipeline/render.rs
+index b55be15c2d..4e8f23dc5e 100644
+--- a/third_party/rust/metal/src/pipeline/render.rs
++++ b/third_party/rust/metal/src/pipeline/render.rs
+@@ -218,7 +218,7 @@ foreign_obj_type! {
+ 
+ impl ArgumentArrayRef {
+     pub fn object_at(&self, index: NSUInteger) -> Option<&ArgumentRef> {
+-        unsafe { msg_send![self, objectAtIndexedSubscript: index] }
++        unsafe { msg_send![self, objectAtIndex: index] }
+     }
+ 
+     pub fn count(&self) -> NSUInteger {
+@@ -745,7 +745,7 @@ impl RenderPipelineColorAttachmentDescriptorArrayRef {
+         &self,
+         index: NSUInteger,
+     ) -> Option<&RenderPipelineColorAttachmentDescriptorRef> {
+-        unsafe { msg_send![self, objectAtIndexedSubscript: index] }
++        unsafe { msg_send![self, objectAtIndex: index] }
+     }
+ 
+     pub fn set_object_at(
+@@ -755,7 +755,7 @@ impl RenderPipelineColorAttachmentDescriptorArrayRef {
+     ) {
+         unsafe {
+             msg_send![self, setObject:attachment
+-                   atIndexedSubscript:index]
++                   atIndex:index]
+         }
+     }
+ }
+-- 
+2.53.0
+

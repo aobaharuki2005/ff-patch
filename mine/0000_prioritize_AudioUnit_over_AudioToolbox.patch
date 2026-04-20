@@ -1,0 +1,50 @@
+From a28a27506b2e24498191ad28ab0b2738de9bc875 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sat, 28 Mar 2026 18:42:33 +0700
+Subject: [PATCH] Fix: prioritize AudioUnit.framework in favor of AudioToolbox
+
+This patch is to fix the error "Symbol not found: _AudioComponentFindNext, _AudioComponentInstanceDispose, _AudioComponentInstanceNew, expected in AudioToolbox.framework", while in macOS 10.9 and earlier, these symbols has not been moved out of AudioUnit.framework yet. By prioritizing AudioUnit.framework over AudioToolBox in all OS_LIB lists where both appears, we ensure that the symbols will be searched first in AudioUnit and then be linked there, which eliminates the missing symbol error on macOS 10.9 and earlier
+---
+ dom/media/platforms/moz.build  | 1 +
+ media/libcubeb/gtest/moz.build | 1 +
+ toolkit/library/moz.build      | 2 +-
+ 3 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/dom/media/platforms/moz.build b/dom/media/platforms/moz.build
+index 81db4d807fb76..9acbf420a2338 100644
+--- a/dom/media/platforms/moz.build
++++ b/dom/media/platforms/moz.build
+@@ -108,6 +108,7 @@ if CONFIG["MOZ_APPLEMEDIA"]:
+         "/media/libyuv/libyuv/include",
+     ]
+     OS_LIBS += [
++        "-framework AudioUnit",
+         "-framework AudioToolbox",
+         "-framework CoreMedia",
+         "-framework VideoToolbox",
+diff --git a/media/libcubeb/gtest/moz.build b/media/libcubeb/gtest/moz.build
+index 3a03ad973ff89..2d37550075ffc 100644
+--- a/media/libcubeb/gtest/moz.build
++++ b/media/libcubeb/gtest/moz.build
+@@ -72,6 +72,7 @@ if CONFIG['MOZ_WIDGET_TOOLKIT'] == 'cocoa':
+ elif CONFIG['MOZ_WIDGET_TOOLKIT'] == 'uikit':
+     OS_LIBS += [
+       '-framework CoreFoundation',
++      '-framework AudioUnit',
+       '-framework AudioToolbox',
+     ]
+ 
+diff --git a/toolkit/library/moz.build b/toolkit/library/moz.build
+index 6eeef5e5f13c7..1018d2323dff4 100644
+--- a/toolkit/library/moz.build
++++ b/toolkit/library/moz.build
+@@ -221,8 +221,8 @@ if CONFIG["MOZ_WIDGET_TOOLKIT"] == "cocoa":
+         "-framework Carbon",
+         "-framework CoreAudio",
+         "-framework CoreVideo",
+-        "-framework AudioToolbox",
+         "-framework AudioUnit",
++        "-framework AudioToolbox",
+         "-framework AddressBook",
+         "-framework OpenGL",
+         "-framework Security",

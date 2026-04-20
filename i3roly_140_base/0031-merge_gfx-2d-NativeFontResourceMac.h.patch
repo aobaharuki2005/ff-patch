@@ -1,0 +1,39 @@
+From 8f105bdf237cdc4dbdc277b745f29522f0cc1a72 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:56 +0700
+Subject: [PATCH 031/246] merge_gfx/2d/NativeFontResourceMac.h
+
+---
+ gfx/2d/NativeFontResourceMac.h | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/gfx/2d/NativeFontResourceMac.h b/gfx/2d/NativeFontResourceMac.h
+index 97683a8a4f..e679472fcd 100644
+--- a/gfx/2d/NativeFontResourceMac.h
++++ b/gfx/2d/NativeFontResourceMac.h
+@@ -26,20 +26,15 @@ class NativeFontResourceMac final : public NativeFontResource {
+       uint32_t aInstanceDataLength) final;
+ 
+   ~NativeFontResourceMac() {
+-    CFRelease(mFontDescRef);
+     CFRelease(mFontRef);
+   }
+ 
+   static void RegisterMemoryReporter();
+ 
+  private:
+-  explicit NativeFontResourceMac(CTFontDescriptorRef aFontDescRef,
+-                                 CGFontRef aFontRef, size_t aDataLength)
+-      : NativeFontResource(aDataLength),
+-        mFontDescRef(aFontDescRef),
+-        mFontRef(aFontRef) {}
++  explicit NativeFontResourceMac(CGFontRef aFontRef, size_t aDataLength)
++      : NativeFontResource(aDataLength), mFontRef(aFontRef) {}
+ 
+-  CTFontDescriptorRef mFontDescRef;
+   CGFontRef mFontRef;
+ };
+ 
+-- 
+2.53.0
+

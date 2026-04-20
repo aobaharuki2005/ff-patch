@@ -1,0 +1,25 @@
+From 442373f31938eb31043ff650bc8fd163e3a43643 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:33:49 +0700
+Subject: [PATCH 104/246] merge_security/manager/ssl/osclientcerts/Cargo.toml
+
+---
+ security/manager/ssl/osclientcerts/Cargo.toml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/security/manager/ssl/osclientcerts/Cargo.toml b/security/manager/ssl/osclientcerts/Cargo.toml
+index b634715bf5..3c12981f41 100644
+--- a/security/manager/ssl/osclientcerts/Cargo.toml
++++ b/security/manager/ssl/osclientcerts/Cargo.toml
+@@ -20,6 +20,8 @@ rsclientcerts = { path = "../rsclientcerts" }
+ sha2 = "0.10.2"
+ xpcom = { path = "../../../../xpcom/rust/xpcom" }
+ 
++whatsys = "0.3"
++
+ [target."cfg(any(target_os = \"macos\", target_os = \"ios\"))".dependencies.core-foundation]
+ version = "0.9"
+ 
+-- 
+2.53.0
+

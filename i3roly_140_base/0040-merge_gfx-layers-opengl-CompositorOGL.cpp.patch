@@ -1,0 +1,47 @@
+From 5b672166ad6ff86cdb9941960b446511cdd5db0c Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:32:10 +0700
+Subject: [PATCH 040/246] merge_gfx/layers/opengl/CompositorOGL.cpp
+
+---
+ gfx/layers/opengl/CompositorOGL.cpp | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/gfx/layers/opengl/CompositorOGL.cpp b/gfx/layers/opengl/CompositorOGL.cpp
+index ea88425d96..3cf0d7fe85 100644
+--- a/gfx/layers/opengl/CompositorOGL.cpp
++++ b/gfx/layers/opengl/CompositorOGL.cpp
+@@ -50,6 +50,9 @@
+ #include "HeapCopyOfStackArray.h"
+ #include "GLBlitHelper.h"
+ #include "mozilla/gfx/Swizzle.h"
++#ifdef XP_MACOSX
++#include "nsCocoaFeatures.h"
++#endif
+ #ifdef MOZ_WIDGET_GTK
+ #  include "mozilla/widget/GtkCompositorWidget.h"
+ #endif
+@@ -1374,7 +1377,19 @@ void CompositorOGL::DrawGeometry(const Geometry& aGeometry,
+     gl()->fBlendFuncSeparate(LOCAL_GL_ONE, LOCAL_GL_ONE_MINUS_SRC_ALPHA,
+                              LOCAL_GL_ONE, LOCAL_GL_ONE_MINUS_SRC_ALPHA);
+   }
+-
++#ifdef XP_MACOSX
++      if (gl()->WorkAroundDriverBugs() &&
++          gl()->Vendor() == GLVendor::NVIDIA &&
++          !nsCocoaFeatures::OnMavericksOrLater()) {
++        // Bug 987497: With some GPUs the nvidia driver on 10.8 and below
++        // won't pick up the TexturePass2 uniform change below if we don't do
++        // something to force it. Re-activating the shader seems to be one way
++        // of achieving that.
++        GLint program;
++        mGLContext->fGetIntegerv(LOCAL_GL_CURRENT_PROGRAM, &program);
++        mGLContext->fUseProgram(program);
++      }
++#endif
+   // in case rendering has used some other GL context
+   MakeCurrent();
+ }
+-- 
+2.53.0
+

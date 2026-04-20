@@ -1,0 +1,30 @@
+From 05e76734bc724573fc38d9dcc193700081caf3e0 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:46 +0700
+Subject: [PATCH 025/246] 
+ merge_dom/media/systemservices/objc_video_capture/video_capture_avfoundation.mm
+
+---
+ .../objc_video_capture/video_capture_avfoundation.mm        | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/dom/media/systemservices/objc_video_capture/video_capture_avfoundation.mm b/dom/media/systemservices/objc_video_capture/video_capture_avfoundation.mm
+index ca7bf4db9b..186e3455ae 100644
+--- a/dom/media/systemservices/objc_video_capture/video_capture_avfoundation.mm
++++ b/dom/media/systemservices/objc_video_capture/video_capture_avfoundation.mm
+@@ -125,9 +125,9 @@ rtc::scoped_refptr<VideoCaptureModule> VideoCaptureAvFoundation::Create(
+     const char* _Nullable aDeviceUniqueIdUTF8) {
+   std::string uniqueId(aDeviceUniqueIdUTF8);
+ 
+-  for (AVCaptureDevice* device in [RTCCameraVideoCapturer
+-           captureDevicesWithDeviceTypes:[RTCCameraVideoCapturer
+-                                             defaultCaptureDeviceTypes]]) {
++  for (AVCaptureDevice* device in [RTCCameraVideoCapturer captureDevices]
++           /* //FUCK YOU captureDevicesWithDeviceTypes:[RTCCameraVideoCapturer
++                                             defaultCaptureDeviceTypes]]*/) {
+     if ([NSString stdStringForString:device.uniqueID] == uniqueId) {
+       rtc::scoped_refptr<VideoCaptureModule> module(
+           new rtc::RefCountedObject<VideoCaptureAvFoundation>(device));
+-- 
+2.53.0
+

@@ -1,0 +1,24 @@
+From 471ee6c3d7f303faf3711ab3586bc59e442da9d6 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:32:16 +0700
+Subject: [PATCH 043/246] merge_gfx/skia/skia/src/core/SkScalerContext.h
+
+---
+ gfx/skia/skia/src/core/SkScalerContext.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/gfx/skia/skia/src/core/SkScalerContext.h b/gfx/skia/skia/src/core/SkScalerContext.h
+index b73585d8dd..32328c4de4 100644
+--- a/gfx/skia/skia/src/core/SkScalerContext.h
++++ b/gfx/skia/skia/src/core/SkScalerContext.h
+@@ -280,6 +280,7 @@ public:
+         kBaselineSnap_Flag        = 0x2000,
+ 
+         kNeedsForegroundColor_Flag = 0x4000,
++        kLightOnDark_Flag          = 0x8000,
+     };
+ 
+     // computed values
+-- 
+2.53.0
+

@@ -1,0 +1,27 @@
+From 6c7787e647c0a74127058e396dbbcb177c2a5fdd Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:37:18 +0700
+Subject: [PATCH 217/246] merge_xpcom/base/MacStringHelpers.mm
+
+---
+ xpcom/base/MacStringHelpers.mm | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/xpcom/base/MacStringHelpers.mm b/xpcom/base/MacStringHelpers.mm
+index 30b447548a..d8e8fefa66 100644
+--- a/xpcom/base/MacStringHelpers.mm
++++ b/xpcom/base/MacStringHelpers.mm
+@@ -21,8 +21,8 @@ void CopyNSStringToXPCOMString(const NSString* aFrom, nsAString& aTo) {
+   }
+ 
+   NSUInteger len = [aFrom length];
+-  if (len > std::numeric_limits<nsAString::size_type>::max()) {
+-    aTo.AllocFailed(std::numeric_limits<nsAString::size_type>::max());
++  if (len > NSUIntegerMax) {
++    aTo.AllocFailed(NSUIntegerMax);
+   }
+ 
+   aTo.SetLength(len);
+-- 
+2.53.0
+

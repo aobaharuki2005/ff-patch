@@ -1,0 +1,25 @@
+From b867b9b7f7fedb266015305b3d2021efe19200d3 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:33:12 +0700
+Subject: [PATCH 080/246] merge_media/libsoundtouch/moz.yaml
+
+---
+ media/libsoundtouch/moz.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/media/libsoundtouch/moz.yaml b/media/libsoundtouch/moz.yaml
+index f3bcb6e8a2..1fcad2dc3d 100644
+--- a/media/libsoundtouch/moz.yaml
++++ b/media/libsoundtouch/moz.yaml
+@@ -52,7 +52,7 @@ vendoring:
+   keep:
+     - AUTHORS
+     - clear-lf.sh
+-    - src/RLBoxSoundTouch*
++    - src/RLBoxSoundTouchFactory.*
+     - src/SoundTouchFactory.*
+     - src/soundtouch_config.h
+     - src/soundtouch_perms.h
+-- 
+2.53.0
+

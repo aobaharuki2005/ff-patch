@@ -1,0 +1,25 @@
+From efda323eac1627977e719c923e7b0a1c2656e182 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:34:40 +0700
+Subject: [PATCH 128/246] 
+ merge_third_party/rust/cubeb-coreaudio/src/backend/device_property.rs
+
+---
+ third_party/rust/cubeb-coreaudio/src/backend/device_property.rs | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/third_party/rust/cubeb-coreaudio/src/backend/device_property.rs b/third_party/rust/cubeb-coreaudio/src/backend/device_property.rs
+index d209f345c6..16358a4a28 100644
+--- a/third_party/rust/cubeb-coreaudio/src/backend/device_property.rs
++++ b/third_party/rust/cubeb-coreaudio/src/backend/device_property.rs
+@@ -4,7 +4,6 @@ pub fn get_device_uid(
+     id: AudioDeviceID,
+     devtype: DeviceType,
+ ) -> std::result::Result<StringRef, OSStatus> {
+-    assert_ne!(id, kAudioObjectUnknown);
+     debug_assert_running_serially();
+ 
+     let address = get_property_address(Property::DeviceUID, devtype);
+-- 
+2.53.0
+

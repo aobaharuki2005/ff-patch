@@ -1,0 +1,34 @@
+From 7298c0ec4cc903cef635bad5666a406aaab74e62 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:31 +0700
+Subject: [PATCH 160/246] merge_toolkit/components/remote/nsMacRemoteServer.mm
+
+---
+ toolkit/components/remote/nsMacRemoteServer.mm | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/toolkit/components/remote/nsMacRemoteServer.mm b/toolkit/components/remote/nsMacRemoteServer.mm
+index d43e03a5f5..743b9b3e9c 100644
+--- a/toolkit/components/remote/nsMacRemoteServer.mm
++++ b/toolkit/components/remote/nsMacRemoteServer.mm
+@@ -39,7 +39,7 @@ void nsMacRemoteServer::HandleCommandLine(CFDataRef aData) {
+     NSDictionary* dict =
+         [NSKeyedUnarchiver unarchiveObjectWithData:(NSData*)aData];
+     if (dict && [dict isKindOfClass:[NSDictionary class]]) {
+-      NSArray* args = dict[@"args"];
++      NSArray* args = [dict objectForKey:@"args"];
+       if (!args) {
+         NS_ERROR("Wrong parameters passed to the Remote Server");
+         return;
+@@ -71,7 +71,7 @@ void nsMacRemoteServer::HandleCommandLine(CFDataRef aData) {
+       // in the current instance.
+       cmdLine->Run();
+ 
+-      NSNumber* raise = dict[@"raise"];
++      NSNumber* raise = [dict objectForKey:@"raise"];
+       if (!raise || [raise boolValue]) {
+         // Activating the application brings the most recent window to the
+         // foreground.
+-- 
+2.53.0
+

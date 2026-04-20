@@ -1,0 +1,27 @@
+From 9c9f71c8375fa0f79a47b9f10dc3fb524050fa54 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:18 +0700
+Subject: [PATCH 004/246] merge_browser/modules/SharingUtils.sys.mjs
+
+---
+ browser/modules/SharingUtils.sys.mjs | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/browser/modules/SharingUtils.sys.mjs b/browser/modules/SharingUtils.sys.mjs
+index 967ccec0a6..73d7651812 100644
+--- a/browser/modules/SharingUtils.sys.mjs
++++ b/browser/modules/SharingUtils.sys.mjs
+@@ -26,6 +26,10 @@ class SharingUtilsCls {
+   updateShareURLMenuItem(browser, insertAfterEl) {
+     if (!Services.prefs.getBoolPref("browser.menu.share_url.allow", true)) {
+       return;
++    } else if (AppConstants.platform == "macosx") {
++      if (!AppConstants.isPlatformAndVersionAtLeast("macosx", "12")) {
++        return;
++      }
+     }
+ 
+     let shareURL = insertAfterEl.nextElementSibling;
+-- 
+2.53.0
+

@@ -1,0 +1,34 @@
+From 20643e23c14358c6c088433053c8ccd0fa6cccc9 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:00 +0700
+Subject: [PATCH 139/246] merge_third_party/rust/metal/src/blitpass.rs
+
+---
+ third_party/rust/metal/src/blitpass.rs | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/third_party/rust/metal/src/blitpass.rs b/third_party/rust/metal/src/blitpass.rs
+index cb561868f7..1fb37497e2 100644
+--- a/third_party/rust/metal/src/blitpass.rs
++++ b/third_party/rust/metal/src/blitpass.rs
+@@ -35,7 +35,7 @@ impl BlitPassSampleBufferAttachmentDescriptorArrayRef {
+         &self,
+         index: NSUInteger,
+     ) -> Option<&BlitPassSampleBufferAttachmentDescriptorRef> {
+-        unsafe { msg_send![self, objectAtIndexedSubscript: index] }
++        unsafe { msg_send![self, objectAtIndex: index] }
+     }
+ 
+     pub fn set_object_at(
+@@ -45,7 +45,7 @@ impl BlitPassSampleBufferAttachmentDescriptorArrayRef {
+     ) {
+         unsafe {
+             msg_send![self, setObject:attachment
+-                     atIndexedSubscript:index]
++                     atIndex:index]
+         }
+     }
+ }
+-- 
+2.53.0
+

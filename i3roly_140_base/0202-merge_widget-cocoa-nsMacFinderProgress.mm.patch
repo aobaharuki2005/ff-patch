@@ -1,0 +1,88 @@
+From ed854315356697ba58a911fcc7c211a0656469d5 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:36:46 +0700
+Subject: [PATCH 202/246] merge_widget/cocoa/nsMacFinderProgress.mm
+
+---
+ widget/cocoa/nsMacFinderProgress.mm | 65 ++++++++++++++++-------------
+ 1 file changed, 35 insertions(+), 30 deletions(-)
+
+diff --git a/widget/cocoa/nsMacFinderProgress.mm b/widget/cocoa/nsMacFinderProgress.mm
+index e2b0401313..15b59c68e3 100644
+--- a/widget/cocoa/nsMacFinderProgress.mm
++++ b/widget/cocoa/nsMacFinderProgress.mm
+@@ -30,36 +30,41 @@ nsMacFinderProgress::Init(
+     nsIMacFinderProgressCanceledCallback* cancellationCallback) {
+   NS_OBJC_BEGIN_TRY_BLOCK_RETURN;
+ 
+-  NSURL* pathUrl = [NSURL
+-      fileURLWithPath:[NSString
+-                          stringWithCharacters:reinterpret_cast<const unichar*>(
+-                                                   path.BeginReading())
+-                                        length:path.Length()]];
+-  NSDictionary* userInfo = @{
+-    @"NSProgressFileOperationKindKey" :
+-        @"NSProgressFileOperationKindDownloading",
+-    @"NSProgressFileURLKey" : pathUrl
+-  };
+-
+-  mProgress = [[NSProgress alloc] initWithParent:nil userInfo:userInfo];
+-  mProgress.kind = NSProgressKindFile;
+-  mProgress.cancellable = YES;
+-
+-  nsMainThreadPtrHandle<nsIMacFinderProgressCanceledCallback>
+-      cancellationCallbackHandle(
+-          new nsMainThreadPtrHolder<nsIMacFinderProgressCanceledCallback>(
+-              "MacFinderProgress::CancellationCallback", cancellationCallback));
+-
+-  mProgress.cancellationHandler = ^{
+-    NS_DispatchToMainThread(NS_NewRunnableFunction(
+-        "MacFinderProgress::Canceled", [cancellationCallbackHandle] {
+-          MOZ_ASSERT(NS_IsMainThread());
+-          cancellationCallbackHandle->Canceled();
+-        }));
+-  };
+-
+-  [mProgress publish];
+-
++  //APPUL docs say 10.9, but mountain lion has it too, so i dunno
++  //10.7 def crashing on this tho.
++  if(@available(macOS 10.8, *)) {
++    NSURL* pathUrl = [NSURL
++        fileURLWithPath:[NSString
++                            stringWithCharacters:reinterpret_cast<const unichar*>(
++                                                     path.BeginReading())
++                                          length:path.Length()]];
++    NSDictionary* userInfo = @{
++      @"NSProgressFileOperationKindKey" :
++          @"NSProgressFileOperationKindDownloading",
++      @"NSProgressFileURLKey" : pathUrl
++    };
++
++    mProgress = [[NSProgress alloc] initWithParent:nil userInfo:userInfo];
++    mProgress.kind = NSProgressKindFile;
++    mProgress.cancellable = YES;
++
++    nsMainThreadPtrHandle<nsIMacFinderProgressCanceledCallback>
++        cancellationCallbackHandle(
++            new nsMainThreadPtrHolder<nsIMacFinderProgressCanceledCallback>(
++                "MacFinderProgress::CancellationCallback", cancellationCallback));
++
++    mProgress.cancellationHandler = ^{
++      NS_DispatchToMainThread(NS_NewRunnableFunction(
++          "MacFinderProgress::Canceled", [cancellationCallbackHandle] {
++            MOZ_ASSERT(NS_IsMainThread());
++            cancellationCallbackHandle->Canceled();
++          }));
++    };
++
++    [mProgress publish];
++  } else {
++    mProgress = NULL;
++  }
+   return NS_OK;
+ 
+   NS_OBJC_END_TRY_BLOCK_RETURN(NS_ERROR_FAILURE);
+-- 
+2.53.0
+

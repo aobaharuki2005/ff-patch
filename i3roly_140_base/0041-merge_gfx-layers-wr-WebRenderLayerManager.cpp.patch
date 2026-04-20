@@ -1,0 +1,48 @@
+From 21eab62900d55716a48529059c363ea8fb567b21 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:32:12 +0700
+Subject: [PATCH 041/246] merge_gfx/layers/wr/WebRenderLayerManager.cpp
+
+---
+ gfx/layers/wr/WebRenderLayerManager.cpp | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/gfx/layers/wr/WebRenderLayerManager.cpp b/gfx/layers/wr/WebRenderLayerManager.cpp
+index 4ac9f21859..31898852a2 100644
+--- a/gfx/layers/wr/WebRenderLayerManager.cpp
++++ b/gfx/layers/wr/WebRenderLayerManager.cpp
+@@ -37,6 +37,7 @@ namespace layers {
+ WebRenderLayerManager::WebRenderLayerManager(nsIWidget* aWidget)
+     : mWidget(aWidget),
+       mLatestTransactionId{0},
++      mWindowOverlayChanged(false),
+       mNeedsComposite(false),
+       mIsFirstPaint(false),
+       mDestroyed(false),
+@@ -249,6 +250,15 @@ bool WebRenderLayerManager::BeginTransaction(const nsCString& aURL) {
+ 
+ bool WebRenderLayerManager::EndEmptyTransaction(EndTransactionFlags aFlags) {
+   auto clearTarget = MakeScopeExit([&] { mTarget = nullptr; });
++  if (mWindowOverlayChanged) {
++    // If the window overlay changed then we can't do an empty transaction
++    // because we need to repaint the window overlay which we only currently
++    // support in a full transaction.
++    // XXX If we end up hitting this branch a lot we can probably optimize it
++    // by just sending an updated window overlay image instead of rebuilding
++    // the entire WR display list.
++    return false;
++  }
+ 
+   // If we haven't sent a display list (since creation or since the last time we
+   // sent ClearDisplayList to the parent) then we can't do an empty transaction
+@@ -343,6 +353,7 @@ void WebRenderLayerManager::EndTransactionWithoutLayer(
+   mDLBuilder->Begin(&mDisplayItemCache);
+ 
+   wr::IpcResourceUpdateQueue resourceUpdates(WrBridge());
++  mWindowOverlayChanged = false;
+   wr::usize builderDumpIndex = 0;
+   bool containsSVGGroup = false;
+   bool dumpEnabled =
+-- 
+2.53.0
+

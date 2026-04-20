@@ -1,0 +1,52 @@
+From e1064deeea6ceb329e30624716ff7ea3bda94ac6 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:08 +0700
+Subject: [PATCH 145/246] merge_third_party/rust/metal/src/renderpass.rs
+
+---
+ third_party/rust/metal/src/renderpass.rs | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/third_party/rust/metal/src/renderpass.rs b/third_party/rust/metal/src/renderpass.rs
+index f23d9342cb..de4b96a0b6 100644
+--- a/third_party/rust/metal/src/renderpass.rs
++++ b/third_party/rust/metal/src/renderpass.rs
+@@ -235,7 +235,7 @@ foreign_obj_type! {
+ 
+ impl RenderPassColorAttachmentDescriptorArrayRef {
+     pub fn object_at(&self, index: NSUInteger) -> Option<&RenderPassColorAttachmentDescriptorRef> {
+-        unsafe { msg_send![self, objectAtIndexedSubscript: index] }
++        unsafe { msg_send![self, objectAtIndex: index] }
+     }
+ 
+     pub fn set_object_at(
+@@ -245,7 +245,7 @@ impl RenderPassColorAttachmentDescriptorArrayRef {
+     ) {
+         unsafe {
+             msg_send![self, setObject:attachment
+-                     atIndexedSubscript:index]
++                     atIndex:index]
+         }
+     }
+ }
+@@ -335,7 +335,7 @@ impl RenderPassSampleBufferAttachmentDescriptorArrayRef {
+         &self,
+         index: NSUInteger,
+     ) -> Option<&RenderPassSampleBufferAttachmentDescriptorRef> {
+-        unsafe { msg_send![self, objectAtIndexedSubscript: index] }
++        unsafe { msg_send![self, objectAtIndex: index] }
+     }
+ 
+     pub fn set_object_at(
+@@ -345,7 +345,7 @@ impl RenderPassSampleBufferAttachmentDescriptorArrayRef {
+     ) {
+         unsafe {
+             msg_send![self, setObject:attachment
+-                     atIndexedSubscript:index]
++                     atIndex:index]
+         }
+     }
+ }
+-- 
+2.53.0
+

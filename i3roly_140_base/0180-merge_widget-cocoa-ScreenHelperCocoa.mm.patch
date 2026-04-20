@@ -1,0 +1,39 @@
+From 31b52c14345eff9094a292be6e16e1a3f2062ad9 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:36:06 +0700
+Subject: [PATCH 180/246] merge_widget/cocoa/ScreenHelperCocoa.mm
+
+---
+ widget/cocoa/ScreenHelperCocoa.mm | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/widget/cocoa/ScreenHelperCocoa.mm b/widget/cocoa/ScreenHelperCocoa.mm
+index 2f1408e345..f5f935b900 100644
+--- a/widget/cocoa/ScreenHelperCocoa.mm
++++ b/widget/cocoa/ScreenHelperCocoa.mm
+@@ -112,9 +112,11 @@ static already_AddRefed<Screen> MakeScreen(NSScreen* aScreen) {
+ 
+   // What's the maximum color component value this screen can display? This
+   // is a reasonable stand-in for measuring peak brightness.
+-  CGFloat componentValueMax =
+-      aScreen.maximumPotentialExtendedDynamicRangeColorComponentValue;
+ 
++  CGFloat componentValueMax = 0.0f;
++  if(@available(macOS 10.15, *)) {
++    componentValueMax = aScreen.maximumPotentialExtendedDynamicRangeColorComponentValue;
++  }
+   // Should we treat this as HDR? Based on spec at
+   // https://drafts.csswg.org/mediaqueries-5/#dynamic-range, we'll consider it
+   // HDR if it has pixel depth greater than 24, and if has high peak brightness,
+@@ -128,7 +130,7 @@ static already_AddRefed<Screen> MakeScreen(NSScreen* aScreen) {
+   bool isHDR = pixelDepth > 24 && componentValueMax > 1.0;
+ 
+   // Double-check HDR against the platform capabilities.
+-  isHDR &= nsCocoaFeatures::OnBigSurOrLater();
++  isHDR &= nsCocoaFeatures::OnCatalinaOrLater();
+ 
+   float dpi = 96.0f;
+   CGDirectDisplayID displayID =
+-- 
+2.53.0
+

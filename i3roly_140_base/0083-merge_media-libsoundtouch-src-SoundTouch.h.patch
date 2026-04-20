@@ -1,0 +1,25 @@
+From 6c3157d6a64c77411b7636d078eebcfe29f3d9b7 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:33:18 +0700
+Subject: [PATCH 083/246] merge_media/libsoundtouch/src/SoundTouch.h
+
+---
+ media/libsoundtouch/src/SoundTouch.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/media/libsoundtouch/src/SoundTouch.h b/media/libsoundtouch/src/SoundTouch.h
+index b68aba4d44..19c161fed5 100644
+--- a/media/libsoundtouch/src/SoundTouch.h
++++ b/media/libsoundtouch/src/SoundTouch.h
+@@ -165,7 +165,7 @@ namespace soundtouch
+ #define SETTING_INITIAL_LATENCY             8
+ 
+ 
+-class SoundTouch : public FIFOProcessor
++class SOUNDTOUCH_API SoundTouch : public FIFOProcessor
+ {
+ private:
+     /// Rate transposer class instance
+-- 
+2.53.0
+

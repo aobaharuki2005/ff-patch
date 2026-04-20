@@ -1,0 +1,26 @@
+From d97b334627d99d5e597d321e6f21ec5327fa6a18 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:34:57 +0700
+Subject: [PATCH 137/246] merge_third_party/rust/metal/Cargo.toml
+
+---
+ third_party/rust/metal/Cargo.toml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/third_party/rust/metal/Cargo.toml b/third_party/rust/metal/Cargo.toml
+index 77d328b147..d03b48bf94 100644
+--- a/third_party/rust/metal/Cargo.toml
++++ b/third_party/rust/metal/Cargo.toml
+@@ -153,6 +153,9 @@ version = "0.2.4"
+ [dependencies.paste]
+ version = "1"
+ 
++[dependencies.whatsys]
++version = "0.3"
++
+ [dev-dependencies.cocoa]
+ version = "0.25.0"
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,25 @@
+From 8b6434fddb004590f054a6cddb4c10c522b511eb Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:37:02 +0700
+Subject: [PATCH 210/246] merge_widget/cocoa/nsTouchBarInput.mm
+
+---
+ widget/cocoa/nsTouchBarInput.mm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/widget/cocoa/nsTouchBarInput.mm b/widget/cocoa/nsTouchBarInput.mm
+index af638f52d3..0a5da5eca7 100644
+--- a/widget/cocoa/nsTouchBarInput.mm
++++ b/widget/cocoa/nsTouchBarInput.mm
+@@ -118,7 +118,7 @@
+         TouchBarInput* convertedChild =
+             [[TouchBarInput alloc] initWithXPCOM:child];
+         if (convertedChild) {
+-          orderedChildren[i] = convertedChild;
++          [orderedChildren insertObject:convertedChild atIndex:i];
+         }
+       }
+       [self setChildren:orderedChildren];
+-- 
+2.53.0
+

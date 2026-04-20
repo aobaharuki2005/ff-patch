@@ -1,0 +1,25 @@
+From 5d26c138c6ddbd40d6d73ff5bd4bf1fb00bb145e Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:33 +0700
+Subject: [PATCH 161/246] merge_toolkit/moz.configure
+
+---
+ toolkit/moz.configure | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/toolkit/moz.configure b/toolkit/moz.configure
+index 7eb76b2dd0..705b05c6fc 100644
+--- a/toolkit/moz.configure
++++ b/toolkit/moz.configure
+@@ -2810,7 +2810,7 @@ def wasm_sandboxing_libraries():
+ @depends(dependable(wasm_sandboxing_libraries), build_project, target)
+ def default_wasm_sandboxing_libraries(libraries, build_project, target):
+     if build_project != "tools/rusttests" and target.endianness == "little":
+-        non_default_libs = {}
++        non_default_libs = {"soundtouch"}
+ 
+         return tuple(l for l in libraries if l not in non_default_libs)
+ 
+-- 
+2.53.0
+

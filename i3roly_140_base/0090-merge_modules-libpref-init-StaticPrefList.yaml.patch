@@ -1,0 +1,28 @@
+From 7c14378abd4a429403e4b3ade6e521f833a728cd Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:33:27 +0700
+Subject: [PATCH 090/246] merge_modules/libpref/init/StaticPrefList.yaml
+
+---
+ modules/libpref/init/StaticPrefList.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/modules/libpref/init/StaticPrefList.yaml b/modules/libpref/init/StaticPrefList.yaml
+index 2de599b335..acadd3a2cc 100644
+--- a/modules/libpref/init/StaticPrefList.yaml
++++ b/modules/libpref/init/StaticPrefList.yaml
+@@ -9045,7 +9045,11 @@
+ # both unrolling and peeling.
+ - name: javascript.options.wasm_unroll_loops
+   type: bool
++#ifdef NIGHTLY_BUILD
+   value: true
++#else
++  value: false
++#endif
+   mirror: always
+   set_spidermonkey_pref: always
+ 
+-- 
+2.53.0
+

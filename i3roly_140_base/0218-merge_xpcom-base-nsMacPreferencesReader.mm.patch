@@ -1,0 +1,25 @@
+From 646a61f227802affbbad7843fa7ca16ef7cc0d3c Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:37:19 +0700
+Subject: [PATCH 218/246] merge_xpcom/base/nsMacPreferencesReader.mm
+
+---
+ xpcom/base/nsMacPreferencesReader.mm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/xpcom/base/nsMacPreferencesReader.mm b/xpcom/base/nsMacPreferencesReader.mm
+index bfec81cd85..c1b3b0fac0 100644
+--- a/xpcom/base/nsMacPreferencesReader.mm
++++ b/xpcom/base/nsMacPreferencesReader.mm
+@@ -39,7 +39,7 @@ static void EvaluateArray(JSONWriter* aWriter, NSArray* aArray) {
+ static void EvaluateDict(JSONWriter* aWriter,
+                          NSDictionary<NSString*, id>* aDict) {
+   for (NSString* key in aDict) {
+-    id value = aDict[key];
++    id value = [aDict objectForKey:key];
+     if ([value isKindOfClass:[NSString class]]) {
+       aWriter->StringProperty(MakeStringSpan([key UTF8String]),
+                               MakeStringSpan([value UTF8String]));
+-- 
+2.53.0
+

@@ -1,0 +1,40 @@
+From f552d1f4c683cd834d767cdbcc7b2224adffce60 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:33:48 +0700
+Subject: [PATCH 103/246] merge_security/certverifier/NSSCertDBTrustDomain.cpp
+
+---
+ security/certverifier/NSSCertDBTrustDomain.cpp | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/security/certverifier/NSSCertDBTrustDomain.cpp b/security/certverifier/NSSCertDBTrustDomain.cpp
+index 77c17c1ee3..3367949580 100644
+--- a/security/certverifier/NSSCertDBTrustDomain.cpp
++++ b/security/certverifier/NSSCertDBTrustDomain.cpp
+@@ -51,6 +51,10 @@
+ #include "secder.h"
+ #include "secerr.h"
+ 
++#ifdef MOZ_WIDGET_COCOA
++#  include "nsCocoaFeatures.h"
++#endif
++
+ #include "TrustOverrideUtils.h"
+ #include "TrustOverride-AppleGoogleDigiCertData.inc"
+ #include "TrustOverride-SymantecData.inc"
+@@ -1825,6 +1829,12 @@ CK_RV OSClientCerts_C_GetFunctionList(CK_FUNCTION_LIST_PTR_PTR ppFunctionList);
+ }  // extern "C"
+ 
+ bool LoadOSClientCertsModule() {
++#ifdef MOZ_WIDGET_COCOA
++  // osclientcerts requires macOS 10.14 or later
++  if (!nsCocoaFeatures::OnMojaveOrLater()) {
++    return false;
++  }
++#endif
+ // Corresponds to Rust cfg(any(
+ //  target_os = "macos",
+ //  target_os = "ios",
+-- 
+2.53.0
+

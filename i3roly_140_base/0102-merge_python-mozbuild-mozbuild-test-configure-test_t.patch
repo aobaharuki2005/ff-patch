@@ -1,0 +1,26 @@
+From 6075e013a6bb2f326164335100fa337eef69ad7f Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:33:47 +0700
+Subject: [PATCH 102/246] 
+ merge_python/mozbuild/mozbuild/test/configure/test_toolchain_configure.py
+
+---
+ .../mozbuild/test/configure/test_toolchain_configure.py         | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/python/mozbuild/mozbuild/test/configure/test_toolchain_configure.py b/python/mozbuild/mozbuild/test/configure/test_toolchain_configure.py
+index 5e75371e30..3a8999b82f 100644
+--- a/python/mozbuild/mozbuild/test/configure/test_toolchain_configure.py
++++ b/python/mozbuild/mozbuild/test/configure/test_toolchain_configure.py
+@@ -897,7 +897,7 @@ class OSXToolchainTest(BaseToolchainTest):
+             [
+                 "-isysroot",
+                 xcrun("", ("--show-sdk-path",))[1],
+-                "-mmacosx-version-min=10.15",
++                "-mmacosx-version-min=10.13",
+             ]
+         )
+     }
+-- 
+2.53.0
+

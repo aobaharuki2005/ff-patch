@@ -1,0 +1,51 @@
+From c1429821501e66578e03eeb9ffa81bac63c643f8 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:34:02 +0700
+Subject: [PATCH 109/246] merge_security/sandbox/mac/Sandbox.mm
+
+---
+ security/sandbox/mac/Sandbox.mm | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/security/sandbox/mac/Sandbox.mm b/security/sandbox/mac/Sandbox.mm
+index 2a4572b77e..2dbc5f331e 100644
+--- a/security/sandbox/mac/Sandbox.mm
++++ b/security/sandbox/mac/Sandbox.mm
+@@ -330,6 +330,8 @@ bool StartMacSandbox(MacSandboxInfo const& aInfo, std::string& aErrorMessage) {
+       params.push_back("CRASH_PORT");
+       params.push_back(aInfo.crashServerPort.c_str());
+     }
++    params.push_back("MAC_OS_VERSION");
++    params.push_back(combinedVersion.c_str());
+   } else if (aInfo.type == MacSandboxType_RDD) {
+     profile = const_cast<char*>(SandboxPolicyRDD);
+     params.push_back("SHOULD_LOG");
+@@ -354,6 +356,8 @@ bool StartMacSandbox(MacSandboxInfo const& aInfo, std::string& aErrorMessage) {
+       params.push_back("CRASH_PORT");
+       params.push_back(aInfo.crashServerPort.c_str());
+     }
++    params.push_back("MAC_OS_VERSION");
++    params.push_back(combinedVersion.c_str());
+     params.push_back("HOME_PATH");
+     params.push_back(getenv("HOME"));
+   } else if (aInfo.type == MacSandboxType_GMP) {
+@@ -374,6 +378,8 @@ bool StartMacSandbox(MacSandboxInfo const& aInfo, std::string& aErrorMessage) {
+       params.push_back("CRASH_PORT");
+       params.push_back(aInfo.crashServerPort.c_str());
+     }
++    params.push_back("MAC_OS_VERSION");
++    params.push_back(combinedVersion.c_str());
+     if (!aInfo.testingReadPath1.empty()) {
+       params.push_back("TESTING_READ_PATH1");
+       params.push_back(aInfo.testingReadPath1.c_str());
+@@ -410,7 +416,6 @@ bool StartMacSandbox(MacSandboxInfo const& aInfo, std::string& aErrorMessage) {
+         params.push_back("CRASH_PORT");
+         params.push_back(aInfo.crashServerPort.c_str());
+       }
+-
+       params.push_back("DARWIN_USER_CACHE_DIR");
+       char confStrBuf[PATH_MAX];
+       if (!confstr(_CS_DARWIN_USER_CACHE_DIR, confStrBuf, sizeof(confStrBuf))) {
+-- 
+2.53.0
+

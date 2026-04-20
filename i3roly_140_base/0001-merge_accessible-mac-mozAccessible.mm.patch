@@ -1,0 +1,57 @@
+From 9133971939ce3692a0ec96ed5427c1eebc475be3 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:14 +0700
+Subject: [PATCH 001/246] merge_accessible/mac/mozAccessible.mm
+
+---
+ accessible/mac/mozAccessible.mm | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
+
+diff --git a/accessible/mac/mozAccessible.mm b/accessible/mac/mozAccessible.mm
+index cab61875d2..434c893b34 100644
+--- a/accessible/mac/mozAccessible.mm
++++ b/accessible/mac/mozAccessible.mm
+@@ -927,19 +927,22 @@ struct RoleDescrComparator {
+                                  : nullptr;
+   if (maybeRoot && maybeRoot->IsRoot() &&
+       [[self moxDOMIdentifier] isEqualToString:@"a11y-announcement"]) {
+-    nsAutoString name;
+-    // Our actual announcement should be stored as a child of the alert.
+-    if (Accessible* announcement = mGeckoAccessible->FirstChild()) {
+-      announcement->Name(name);
++    // Our actual announcement should be stored as a child of the alert,
++    // so we verify a child exists, and then query that child below.
++    NSArray* children = [self moxChildren];
++    MOZ_ASSERT([children count] == 1 && [children objectAtIndex:0],
++               "A11yUtil event received, but no announcement found?");
++
++    mozAccessible* announcement = [children objectAtIndex:0];
++    NSString* key;
++    if ([announcement providesLabelNotTitle]) {
++      key = [announcement moxLabel];
+     } else {
+-      MOZ_ASSERT_UNREACHABLE(
+-          "A11yUtil event received, but no announcement found?");
++      key = [announcement moxTitle];
+     }
+ 
+     NSDictionary* info = @{
+-      NSAccessibilityAnnouncementKey : name.IsEmpty()
+-          ? @("")
+-          : nsCocoaUtils::ToNSString(name),
++      NSAccessibilityAnnouncementKey : key ? key : @(""),
+       // High priority means VO will stop what it is currently speaking
+       // to speak our announcement.
+       NSAccessibilityPriorityKey : @(NSAccessibilityPriorityHigh)
+@@ -1013,7 +1016,7 @@ struct RoleDescrComparator {
+           static_cast<MOXTextMarkerDelegate*>([self moxTextMarkerDelegate]);
+       NSMutableDictionary* userInfo =
+           [[[delegate selectionChangeInfo] mutableCopy] autorelease];
+-      userInfo[@"AXTextChangeElement"] = self;
++      [userInfo setObject:self forKey:@"AXTextChangeElement"];
+ 
+       mozAccessible* webArea = [self topWebArea];
+       [webArea
+-- 
+2.53.0
+

@@ -1,0 +1,28 @@
+From 5217744f2505fbee7a285e53d283ab4f1345cdb7 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:33:20 +0700
+Subject: [PATCH 085/246] merge_media/libsoundtouch/src/SoundTouchFactory.h
+
+---
+ media/libsoundtouch/src/SoundTouchFactory.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/media/libsoundtouch/src/SoundTouchFactory.h b/media/libsoundtouch/src/SoundTouchFactory.h
+index 2c6cea5b3a..fdeaafbaa4 100644
+--- a/media/libsoundtouch/src/SoundTouchFactory.h
++++ b/media/libsoundtouch/src/SoundTouchFactory.h
+@@ -13,9 +13,11 @@
+ 
+ extern "C" namespace soundtouch
+ {
++SOUNDTOUCH_API
+ soundtouch::SoundTouch*
+ createSoundTouchObj();
+ 
++SOUNDTOUCH_API
+ void
+ destroySoundTouchObj(soundtouch::SoundTouch* aObj);
+ }
+-- 
+2.53.0
+

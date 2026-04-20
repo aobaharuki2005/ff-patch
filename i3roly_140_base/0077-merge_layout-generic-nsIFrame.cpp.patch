@@ -1,0 +1,26 @@
+From fab9d088d8f76f77aa4ee0cbd0eb6a3c2de0ca40 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:33:06 +0700
+Subject: [PATCH 077/246] merge_layout/generic/nsIFrame.cpp
+
+---
+ layout/generic/nsIFrame.cpp | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/layout/generic/nsIFrame.cpp b/layout/generic/nsIFrame.cpp
+index 44c32bd164..35917a9fd7 100644
+--- a/layout/generic/nsIFrame.cpp
++++ b/layout/generic/nsIFrame.cpp
+@@ -5853,8 +5853,7 @@ static bool UseFrameEdge(nsIFrame* aFrame) {
+     return true;
+   }
+   const nsImageFrame* image = do_QueryFrame(aFrame);
+-  if ((image || aFrame->IsHTMLCanvasFrame()) &&
+-      !aFrame->GetContent()->IsEditable()) {
++  if (image && !aFrame->GetContent()->IsEditable()) {
+     // Editable images are a special-case because editing relies on clicking on
+     // an editable image selecting it, for it to show resizers.
+     return true;
+-- 
+2.53.0
+

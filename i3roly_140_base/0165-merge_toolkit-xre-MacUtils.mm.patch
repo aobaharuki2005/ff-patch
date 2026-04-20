@@ -1,0 +1,35 @@
+From 37d1414bd26e0af55e63b4157dcd05d46c0b0936 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:38 +0700
+Subject: [PATCH 165/246] merge_toolkit/xre/MacUtils.mm
+
+---
+ toolkit/xre/MacUtils.mm | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/toolkit/xre/MacUtils.mm b/toolkit/xre/MacUtils.mm
+index f0e42ab91a..27525706e4 100644
+--- a/toolkit/xre/MacUtils.mm
++++ b/toolkit/xre/MacUtils.mm
+@@ -17,11 +17,16 @@ void LaunchTask(NSString* aPath, NSArray* aArguments) {
+ 
+   @try {
+     NSTask* task = [[NSTask alloc] init];
+-    [task setExecutableURL:[NSURL fileURLWithPath:aPath]];
+     if (aArguments) {
+       [task setArguments:aArguments];
+     }
+-    [task launchAndReturnError:nil];
++    if(@available(macOS 10.13, *)) {
++      [task setExecutableURL:[NSURL fileURLWithPath:aPath]];
++      [task launchAndReturnError:nil];
++    } else {
++      [task setLaunchPath:aPath];
++      [task launch];
++    }
+     [task waitUntilExit];
+     [task release];
+   } @catch (NSException* e) {
+-- 
+2.53.0
+

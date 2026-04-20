@@ -1,0 +1,27 @@
+From 5ff549964e1390d9c46b418c56dc8b5d041ca880 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:32:59 +0700
+Subject: [PATCH 072/246] merge_ipc/glue/GeckoChildProcessHost.cpp
+
+---
+ ipc/glue/GeckoChildProcessHost.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ipc/glue/GeckoChildProcessHost.cpp b/ipc/glue/GeckoChildProcessHost.cpp
+index c1b1c52a19..3d330f802c 100644
+--- a/ipc/glue/GeckoChildProcessHost.cpp
++++ b/ipc/glue/GeckoChildProcessHost.cpp
+@@ -1236,9 +1236,9 @@ Result<Ok, LaunchError> PosixProcessLauncher::DoSetup() {
+     nsCString new_dyld_lib_path(path.get());
+     if (PR_GetEnv("MOZ_RUN_GTEST")) {
+       new_dyld_lib_path = path + "/gtest:"_ns + new_dyld_lib_path;
+-      mLaunchOptions->env_map["DYLD_LIBRARY_PATH"] = new_dyld_lib_path.get();
+     }
+ 
++    mLaunchOptions->env_map["DYLD_LIBRARY_PATH"] = new_dyld_lib_path.get();
+     // DYLD_INSERT_LIBRARIES is currently unused by default but we allow
+     // it to be set by the external environment.
+     const char* interpose = PR_GetEnv("DYLD_INSERT_LIBRARIES");
+-- 
+2.53.0
+

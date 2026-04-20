@@ -1,0 +1,25 @@
+From 8171814bd182f9b67b83079d002e90f5d4d78764 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:17 +0700
+Subject: [PATCH 003/246] merge_browser/app/macbuild/Contents/Info.plist.in
+
+---
+ browser/app/macbuild/Contents/Info.plist.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/browser/app/macbuild/Contents/Info.plist.in b/browser/app/macbuild/Contents/Info.plist.in
+index ea28831b90..b95f7a18ae 100644
+--- a/browser/app/macbuild/Contents/Info.plist.in
++++ b/browser/app/macbuild/Contents/Info.plist.in
+@@ -253,7 +253,7 @@
+ 	<key>LSFileQuarantineEnabled</key>
+ 	<true/>
+ 	<key>LSMinimumSystemVersion</key>
+-	<string>10.15.0</string>
++	<string>10.6.0</string>
+   <key>NSSupportsAutomaticGraphicsSwitching</key>
+   <true/>
+   <key>NSRequiresAquaSystemAppearance</key>
+-- 
+2.53.0
+

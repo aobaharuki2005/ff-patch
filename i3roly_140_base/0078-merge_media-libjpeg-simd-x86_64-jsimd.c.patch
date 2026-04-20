@@ -1,0 +1,39 @@
+From 5c73d910880183b4847e04d13d23302b143d82df Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:33:07 +0700
+Subject: [PATCH 078/246] merge_media/libjpeg/simd/x86_64/jsimd.c
+
+---
+ media/libjpeg/simd/x86_64/jsimd.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/media/libjpeg/simd/x86_64/jsimd.c b/media/libjpeg/simd/x86_64/jsimd.c
+index 3f5ee77eb9..97bde92fce 100644
+--- a/media/libjpeg/simd/x86_64/jsimd.c
++++ b/media/libjpeg/simd/x86_64/jsimd.c
+@@ -31,9 +31,21 @@
+ #define IS_ALIGNED_SSE(ptr)  (IS_ALIGNED(ptr, 4)) /* 16 byte alignment */
+ #define IS_ALIGNED_AVX(ptr)  (IS_ALIGNED(ptr, 5)) /* 32 byte alignment */
+ 
++#if defined(XP_DARWIN)
++#include <AvailabilityMacros.h>
++#endif
++#if !defined(MAC_OS_X_VERSION_10_7) || \
++    MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_7
++/* see comments at
++ * https://github.com/libjpeg-turbo/libjpeg-turbo/commit/ae87a958613b69628b92088b313ded0d4f59a716
++ * all removing THREAD_LOCAL does is affect thread safety of the
++ * error handler. even the dev thought it was "innocuous"
++ */
++#  define THREAD_LOCAL
++#endif
++
+ static THREAD_LOCAL unsigned int simd_support = (unsigned int)(~0);
+ static THREAD_LOCAL unsigned int simd_huffman = 1;
+-
+ /*
+  * Check what SIMD accelerations are supported.
+  */
+-- 
+2.53.0
+

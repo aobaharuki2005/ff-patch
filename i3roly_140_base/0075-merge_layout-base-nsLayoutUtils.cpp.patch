@@ -1,0 +1,53 @@
+From 0eaf3eeaf84e207e9adf215c7dc289843a382d5a Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:33:03 +0700
+Subject: [PATCH 075/246] merge_layout/base/nsLayoutUtils.cpp
+
+---
+ layout/base/nsLayoutUtils.cpp | 28 ++++++++++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/layout/base/nsLayoutUtils.cpp b/layout/base/nsLayoutUtils.cpp
+index bc5b7ab177..46f1ba567d 100644
+--- a/layout/base/nsLayoutUtils.cpp
++++ b/layout/base/nsLayoutUtils.cpp
+@@ -2405,10 +2405,34 @@ nsRect nsLayoutUtils::TransformFrameRectToAncestor(
+       NSFloatPixelsToAppUnits(float(result.height), destAppUnitsPerDevPixel));
+ }
+ 
++static LayoutDeviceIntPoint GetWidgetOffset(nsIWidget* aWidget,
++                                            nsIWidget*& aRootWidget) {
++  LayoutDeviceIntPoint offset(0, 0);
++  while (aWidget->GetWindowType() == widget::WindowType::Child) {
++    nsIWidget* parent = aWidget->GetParent();
++    if (!parent) {
++      break;
++    }
++    LayoutDeviceIntRect bounds = aWidget->GetBounds();
++    offset += bounds.TopLeft();
++    aWidget = parent;
++  }
++  aRootWidget = aWidget;
++  return offset;
++}
++
++
+ LayoutDeviceIntPoint nsLayoutUtils::WidgetToWidgetOffset(nsIWidget* aFrom,
+                                                          nsIWidget* aTo) {
+-  auto fromOffset = aFrom->WidgetToScreenOffset();
+-  auto toOffset = aTo->WidgetToScreenOffset();
++  nsIWidget* fromRoot;
++  LayoutDeviceIntPoint fromOffset = GetWidgetOffset(aFrom, fromRoot);
++  nsIWidget* toRoot;
++  LayoutDeviceIntPoint toOffset = GetWidgetOffset(aTo, toRoot);
++
++  if (fromRoot != toRoot) {
++    fromOffset = aFrom->WidgetToScreenOffset();
++    toOffset = aTo->WidgetToScreenOffset();
++  }
+   return fromOffset - toOffset;
+ }
+ 
+-- 
+2.53.0
+

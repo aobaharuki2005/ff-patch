@@ -1,0 +1,32 @@
+From bc0b99aaff607fe04a7da44665e81a4f8064d7cc Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:34:20 +0700
+Subject: [PATCH 118/246] 
+ merge_third_party/libwebrtc/sdk/objc/components/capturer/RTCCameraVideoCapturer.h
+
+---
+ .../sdk/objc/components/capturer/RTCCameraVideoCapturer.h  | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/third_party/libwebrtc/sdk/objc/components/capturer/RTCCameraVideoCapturer.h b/third_party/libwebrtc/sdk/objc/components/capturer/RTCCameraVideoCapturer.h
+index 6aeb577b13..e6b1e27432 100644
+--- a/third_party/libwebrtc/sdk/objc/components/capturer/RTCCameraVideoCapturer.h
++++ b/third_party/libwebrtc/sdk/objc/components/capturer/RTCCameraVideoCapturer.h
+@@ -24,12 +24,9 @@ RTC_OBJC_EXPORT
+ 
+ // Capture session that is used for capturing. Valid from initialization to dealloc.
+ @property(readonly, nonatomic) AVCaptureSession *captureSession;
+-
+ // Returns list of available capture devices that support video capture.
+-+ (NSArray<AVCaptureDevice *> *)captureDevicesWithDeviceTypes:
+-    (NSArray<AVCaptureDeviceType> *)deviceTypes;
+-// Returns list of default capture devices types
+-+ (NSArray<AVCaptureDeviceType> *)defaultCaptureDeviceTypes;
+++ (NSArray<AVCaptureDevice *> *)captureDevices;
++
+ // Returns list of formats that are supported by this class for this device.
+ + (NSArray<AVCaptureDeviceFormat *> *)supportedFormatsForDevice:
+     (AVCaptureDevice *)device;
+-- 
+2.53.0
+

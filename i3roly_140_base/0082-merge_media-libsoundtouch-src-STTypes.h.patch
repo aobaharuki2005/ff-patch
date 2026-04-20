@@ -1,0 +1,33 @@
+From a17d24fa8945aafa49cc1a8f98add662ed2a3d64 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:33:16 +0700
+Subject: [PATCH 082/246] merge_media/libsoundtouch/src/STTypes.h
+
+---
+ media/libsoundtouch/src/STTypes.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/media/libsoundtouch/src/STTypes.h b/media/libsoundtouch/src/STTypes.h
+index a70743dfe4..d80bc2899e 100644
+--- a/media/libsoundtouch/src/STTypes.h
++++ b/media/libsoundtouch/src/STTypes.h
+@@ -49,6 +49,16 @@ typedef unsigned long   ulong;
+ 
+ #include "soundtouch_config.h"
+ 
++#if defined(WIN32)
++#if defined(BUILDING_SOUNDTOUCH)
++#define SOUNDTOUCH_API __declspec(dllexport)
++#else
++#define SOUNDTOUCH_API __declspec(dllimport)
++#endif
++#else
++#define SOUNDTOUCH_API
++#endif
++
+ namespace soundtouch
+ {
+     /// Max allowed number of channels
+-- 
+2.53.0
+

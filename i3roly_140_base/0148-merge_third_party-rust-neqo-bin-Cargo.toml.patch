@@ -1,0 +1,102 @@
+From d693eb22268456279099fa91bfd0de05965cd035 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:11 +0700
+Subject: [PATCH 148/246] merge_third_party/rust/neqo-bin/Cargo.toml
+
+---
+ third_party/rust/neqo-bin/Cargo.toml | 47 ++++++++++++++--------------
+ 1 file changed, 23 insertions(+), 24 deletions(-)
+
+diff --git a/third_party/rust/neqo-bin/Cargo.toml b/third_party/rust/neqo-bin/Cargo.toml
+index 349f411b9e..4a697ee462 100644
+--- a/third_party/rust/neqo-bin/Cargo.toml
++++ b/third_party/rust/neqo-bin/Cargo.toml
+@@ -25,16 +25,16 @@ description = "A basic QUIC HTTP/0.9 and HTTP/3 client and server."
+ homepage = "https://github.com/mozilla/neqo/"
+ readme = "../README.md"
+ keywords = [
+-    "quic",
+-    "http3",
+-    "neqo",
+-    "mozilla",
+-    "ietf",
+-    "firefox",
++"quic",
++"http3",
++"neqo",
++"mozilla",
++"ietf",
++"firefox",
+ ]
+ categories = [
+-    "network-programming",
+-    "web-programming",
++"network-programming",
++"web-programming",
+ ]
+ license = "MIT OR Apache-2.0"
+ repository = "https://github.com/mozilla/neqo/"
+@@ -44,12 +44,11 @@ ignored = ["log"]
+ 
+ [features]
+ bench = [
+-    "neqo-bin/bench",
+-    "neqo-http3/bench",
+-    "neqo-transport/bench",
++"neqo-bin/bench",
++"neqo-http3/bench",
++"neqo-transport/bench",
+ ]
+ draft-29 = []
+-fast-apple-datapath = ["quinn-udp/fast-apple-datapath"]
+ 
+ [lib]
+ name = "neqo_bin"
+@@ -75,12 +74,12 @@ required-features = ["bench"]
+ [dependencies.clap]
+ version = "4.5"
+ features = [
+-    "std",
+-    "help",
+-    "usage",
+-    "error-context",
+-    "suggestions",
+-    "derive",
++"std",
++"help",
++"usage",
++"error-context",
++"suggestions",
++"derive",
+ ]
+ default-features = false
+ 
+@@ -135,10 +134,10 @@ default-features = false
+ [dependencies.tokio]
+ version = "1"
+ features = [
+-    "net",
+-    "time",
+-    "macros",
+-    "rt",
++"net",
++"time",
++"macros",
++"rt",
+ ]
+ default-features = false
+ 
+@@ -150,8 +149,8 @@ default-features = false
+ [dev-dependencies.criterion]
+ version = "0.6"
+ features = [
+-    "async_tokio",
+-    "cargo_bench_support",
++"async_tokio",
++"cargo_bench_support",
+ ]
+ default-features = false
+ 
+-- 
+2.53.0
+

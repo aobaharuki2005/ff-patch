@@ -1,0 +1,27 @@
+From f1ec715f34cedcb6ad4e82ab22424b0e36b7379e Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:32:02 +0700
+Subject: [PATCH 034/246] merge_gfx/gl/GLContext.h
+
+---
+ gfx/gl/GLContext.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/gfx/gl/GLContext.h b/gfx/gl/GLContext.h
+index 45c75e8b6e..f93378d594 100644
+--- a/gfx/gl/GLContext.h
++++ b/gfx/gl/GLContext.h
+@@ -55,6 +55,10 @@ constexpr inline std::array<ElemT, 1 + sizeof...(More)> make_array(
+ #  include "mozilla/ProfilerLabels.h"
+ #endif
+ 
++#if defined(MOZ_WIDGET_COCOA)
++#  include "nsCocoaFeatures.h"
++#endif
++
+ namespace mozilla {
+ 
+ namespace gl {
+-- 
+2.53.0
+

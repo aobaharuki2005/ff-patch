@@ -1,0 +1,37 @@
+From a1108a24d6e1dcc730d5ee5b2c61ec50446cd374 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:32:54 +0700
+Subject: [PATCH 068/246] merge_ipc/chromium/src/base/process_util.h
+
+---
+ ipc/chromium/src/base/process_util.h | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/ipc/chromium/src/base/process_util.h b/ipc/chromium/src/base/process_util.h
+index b0585e5e5a..951238835b 100644
+--- a/ipc/chromium/src/base/process_util.h
++++ b/ipc/chromium/src/base/process_util.h
+@@ -96,12 +96,19 @@ void CloseProcessHandle(ProcessHandle process);
+ ProcessId GetProcId(ProcessHandle process);
+ 
+ #if defined(XP_UNIX)
++#  if defined(XP_MACOSX)
++// Sets all file descriptors to close on exec except for stdin, stdout
++// and stderr.
++// TODO(agl): remove this function
++// WARNING: do not use. It's inherently race-prone in the face of
++// multi-threading.
++void SetAllFDsToCloseOnExec();
++#  endif
+ // Close all file descriptors, except for std{in,out,err} and those
+ // for which the given function returns true.  Only call this function
+ // in a child process where you know that there aren't any other
+ // threads.
+ void CloseSuperfluousFds(void* aCtx, bool (*aShouldPreserve)(void*, int));
+-
+ typedef std::vector<std::pair<int, int> > file_handle_mapping_vector;
+ typedef std::map<std::string, std::string> environment_map;
+ 
+-- 
+2.53.0
+

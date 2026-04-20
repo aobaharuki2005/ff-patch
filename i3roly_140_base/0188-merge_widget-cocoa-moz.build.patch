@@ -1,0 +1,32 @@
+From 9f9f3d6c4c9accf33d5b759f5042f2e0baf464f6 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:36:23 +0700
+Subject: [PATCH 188/246] merge_widget/cocoa/moz.build
+
+---
+ widget/cocoa/moz.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/widget/cocoa/moz.build b/widget/cocoa/moz.build
+index 2e76cc5805..6e74930221 100644
+--- a/widget/cocoa/moz.build
++++ b/widget/cocoa/moz.build
+@@ -79,6 +79,7 @@ SOURCES += [
+     "MediaHardwareKeysEventSourceMac.mm",
+     "MediaHardwareKeysEventSourceMacMediaCenter.mm",
+     "MediaKeysEventSourceFactory.cpp",
++    "nsChildView.mm",
+     "nsClipboard.mm",
+     "nsDragService.mm",
+     "nsNativeThemeCocoa.mm",
+@@ -164,7 +165,6 @@ RESOURCE_FILES.__setattr__(
+ )
+ 
+ OS_LIBS += [
+-    "-framework Accessibility",
+     "-framework IOSurface",
+     "-framework Vision",
+ ]
+-- 
+2.53.0
+

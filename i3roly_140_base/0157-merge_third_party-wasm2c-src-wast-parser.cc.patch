@@ -1,0 +1,25 @@
+From 3b22643c1cdfee0d49540cf3e577e9e7f02d11ea Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:27 +0700
+Subject: [PATCH 157/246] merge_third_party/wasm2c/src/wast-parser.cc
+
+---
+ third_party/wasm2c/src/wast-parser.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/third_party/wasm2c/src/wast-parser.cc b/third_party/wasm2c/src/wast-parser.cc
+index e3606b7c7a..80635cbd21 100644
+--- a/third_party/wasm2c/src/wast-parser.cc
++++ b/third_party/wasm2c/src/wast-parser.cc
+@@ -3746,7 +3746,7 @@ void WastParser::TokenQueue::pop_front() {
+ 
+ const Token& WastParser::TokenQueue::at(size_t n) const {
+   assert(n <= 1);
+-  return tokens[i ^ static_cast<bool>(n)].value();
++  return *tokens[i ^ static_cast<bool>(n)];
+ }
+ 
+ const Token& WastParser::TokenQueue::front() const {
+-- 
+2.53.0
+

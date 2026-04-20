@@ -1,0 +1,25 @@
+From 6b5376bd2b1561cdec5112862f2cbc6d12be66f2 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:52 +0700
+Subject: [PATCH 029/246] merge_gfx/2d/MacIOSurface.cpp
+
+---
+ gfx/2d/MacIOSurface.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gfx/2d/MacIOSurface.cpp b/gfx/2d/MacIOSurface.cpp
+index e50bcf34f8..de437656a0 100644
+--- a/gfx/2d/MacIOSurface.cpp
++++ b/gfx/2d/MacIOSurface.cpp
+@@ -168,7 +168,7 @@ static void SetIOSurfaceCommonProperties(
+   auto colorSpace = CFTypeRefPtr<CGColorSpaceRef>::WrapUnderCreateRule(
+       CGDisplayCopyColorSpace(CGMainDisplayID()));
+   auto colorData = CFTypeRefPtr<CFDataRef>::WrapUnderCreateRule(
+-      CGColorSpaceCopyICCData(colorSpace.get()));
++      CGColorSpaceCopyICCProfile(colorSpace.get()));
+   IOSurfaceSetValue(surfaceRef.get(), CFSTR("IOSurfaceColorSpace"),
+                     colorData.get());
+ #endif
+-- 
+2.53.0
+

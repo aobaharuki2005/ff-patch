@@ -1,0 +1,39 @@
+From 17cf85bee991469c0e473a71dbe1c9465effe41a Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:34:18 +0700
+Subject: [PATCH 116/246] 
+ merge_servo/components/style/values/specified/color.rs
+
+---
+ servo/components/style/values/specified/color.rs | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/servo/components/style/values/specified/color.rs b/servo/components/style/values/specified/color.rs
+index 18ddeec237..dd0db50af7 100644
+--- a/servo/components/style/values/specified/color.rs
++++ b/servo/components/style/values/specified/color.rs
+@@ -273,6 +273,21 @@ pub enum SystemColor {
+     #[parse(condition = "ParserContext::chrome_rules_enabled")]
+     MozSidebarborder,
+ 
++    /// Font smoothing background colors needed by the Mac OS X theme, based on
++    /// -moz-appearance names.
++    MozMacVibrancyLight,
++    MozMacVibrancyDark,
++    MozMacVibrantTitlebarLight,
++    MozMacVibrantTitlebarDark,
++    MozMacMenupopup,
++    MozMacMenuitem,
++    MozMacActiveMenuitem,
++    MozMacSourceList,
++    MozMacSourceListSelection,
++    MozMacActiveSourceListSelection,
++
++    MozMacTooltip,
++
+     /// Theme accent color.
+     /// https://drafts.csswg.org/css-color-4/#valdef-system-color-accentcolor
+     Accentcolor,
+-- 
+2.53.0
+

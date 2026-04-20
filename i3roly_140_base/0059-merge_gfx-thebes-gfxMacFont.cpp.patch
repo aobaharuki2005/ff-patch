@@ -1,0 +1,25 @@
+From f63fe3c8313ef5f64a426f7aab13d90ff3506e2d Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:32:40 +0700
+Subject: [PATCH 059/246] merge_gfx/thebes/gfxMacFont.cpp
+
+---
+ gfx/thebes/gfxMacFont.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gfx/thebes/gfxMacFont.cpp b/gfx/thebes/gfxMacFont.cpp
+index 746477d724..3514b20b19 100644
+--- a/gfx/thebes/gfxMacFont.cpp
++++ b/gfx/thebes/gfxMacFont.cpp
+@@ -457,7 +457,7 @@ int32_t gfxMacFont::GetGlyphWidth(uint16_t aGID) {
+   }
+ 
+   CGSize advance;
+-  ::CTFontGetAdvancesForGlyphs(mCTFont, kCTFontOrientationDefault, &aGID,
++  ::CTFontGetAdvancesForGlyphs(mCTFont, kCTFontDefaultOrientation, &aGID,
+                                &advance, 1);
+   return advance.width * 0x10000;
+ }
+-- 
+2.53.0
+

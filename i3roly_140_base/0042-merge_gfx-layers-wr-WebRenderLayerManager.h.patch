@@ -1,0 +1,32 @@
+From 6163031fbb67c7a6fe10f2b609b1da7cd7eae14f Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:32:13 +0700
+Subject: [PATCH 042/246] merge_gfx/layers/wr/WebRenderLayerManager.h
+
+---
+ gfx/layers/wr/WebRenderLayerManager.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/gfx/layers/wr/WebRenderLayerManager.h b/gfx/layers/wr/WebRenderLayerManager.h
+index dbd134dd65..4b0a84a576 100644
+--- a/gfx/layers/wr/WebRenderLayerManager.h
++++ b/gfx/layers/wr/WebRenderLayerManager.h
+@@ -167,6 +167,7 @@ class WebRenderLayerManager final : public WindowRenderer {
+   WebRenderScrollData& GetScrollData() { return mScrollData; }
+ 
+   void WrUpdated();
++  void WindowOverlayChanged() { mWindowOverlayChanged = true; }
+   nsIWidget* GetWidget() { return mWidget; }
+ 
+   uint32_t StartFrameTimeRecording(int32_t aBufferSize) override;
+@@ -242,6 +243,7 @@ class WebRenderLayerManager final : public WindowRenderer {
+   // APZ to do it's job
+   WebRenderScrollData mScrollData;
+ 
++  bool mWindowOverlayChanged;
+   bool mNeedsComposite;
+   bool mIsFirstPaint;
+   bool mDestroyed;
+-- 
+2.53.0
+

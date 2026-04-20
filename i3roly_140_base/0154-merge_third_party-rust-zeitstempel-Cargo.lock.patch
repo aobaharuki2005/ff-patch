@@ -1,0 +1,22 @@
+From 9e3100d573d709e9b7637b1b0d8e30807f476542 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:24 +0700
+Subject: [PATCH 154/246] merge_third_party/rust/zeitstempel/Cargo.lock
+
+---
+ third_party/rust/zeitstempel/Cargo.lock | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/third_party/rust/zeitstempel/Cargo.lock b/third_party/rust/zeitstempel/Cargo.lock
+index ef4e48c0f0..83f253ea85 100644
+--- a/third_party/rust/zeitstempel/Cargo.lock
++++ b/third_party/rust/zeitstempel/Cargo.lock
+@@ -25,4 +25,5 @@ dependencies = [
+  "cfg-if",
+  "libc",
+  "once_cell",
++ "whatsys",
+ ]
+-- 
+2.53.0
+

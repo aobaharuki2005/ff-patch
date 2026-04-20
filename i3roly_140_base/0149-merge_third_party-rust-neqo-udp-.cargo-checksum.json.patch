@@ -1,0 +1,21 @@
+From 598760bf4776d63eb432d7052d751f62ce8c87ad Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:13 +0700
+Subject: [PATCH 149/246] merge_third_party/rust/neqo-udp/.cargo-checksum.json
+
+---
+ third_party/rust/neqo-udp/.cargo-checksum.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/third_party/rust/neqo-udp/.cargo-checksum.json b/third_party/rust/neqo-udp/.cargo-checksum.json
+index a13e88ca86..0fa6ce0885 100644
+--- a/third_party/rust/neqo-udp/.cargo-checksum.json
++++ b/third_party/rust/neqo-udp/.cargo-checksum.json
+@@ -1 +1 @@
+-{"files":{"Cargo.toml":"c89189da7cd2c491fce408b100dea4c7232db20441319d708748a31ea83942ea","build.rs":"bf57cd35a78f636c14c442c1926abc2deca3d137e9d207e4f2f960f5b8363b07","src/lib.rs":"1bad66d7eecff9844706bbfd4231d6a3d9e02ccf81dc54183e7954ca3be9d455"},"package":null}
+\ No newline at end of file
++{"files":{"Cargo.toml":"21fad3c36ed07654b70f4c37837915561a97d6337ef252cd78e17925d158aed7","build.rs":"bf57cd35a78f636c14c442c1926abc2deca3d137e9d207e4f2f960f5b8363b07","src/lib.rs":"1bad66d7eecff9844706bbfd4231d6a3d9e02ccf81dc54183e7954ca3be9d455"},"package":null}
+\ No newline at end of file
+-- 
+2.53.0
+

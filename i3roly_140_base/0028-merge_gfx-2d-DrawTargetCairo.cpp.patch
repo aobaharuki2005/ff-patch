@@ -1,0 +1,27 @@
+From 5a8ab5b67e78933ddb62feee0ae250e3aa90fc13 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:50 +0700
+Subject: [PATCH 028/246] merge_gfx/2d/DrawTargetCairo.cpp
+
+---
+ gfx/2d/DrawTargetCairo.cpp | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/gfx/2d/DrawTargetCairo.cpp b/gfx/2d/DrawTargetCairo.cpp
+index dedab67d1a..3d4b755edd 100644
+--- a/gfx/2d/DrawTargetCairo.cpp
++++ b/gfx/2d/DrawTargetCairo.cpp
+@@ -1569,9 +1569,7 @@ void DrawTargetCairo::PushClipRect(const Rect& aRect) {
+ }
+ 
+ void DrawTargetCairo::PopClip() {
+-  if (NS_WARN_IF(mClipDepth <= 0)) {
+-    return;
+-  }
++  MOZ_ASSERT(mClipDepth > 0);
+ 
+   // save/restore does not affect the path, so no need to call WillChange()
+ 
+-- 
+2.53.0
+

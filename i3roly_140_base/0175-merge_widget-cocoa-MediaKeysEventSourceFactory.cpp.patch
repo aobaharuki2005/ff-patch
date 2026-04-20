@@ -1,0 +1,35 @@
+From 3aa37accd5710fdaf3d16a8144703ae78c51c30c Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:57 +0700
+Subject: [PATCH 175/246] merge_widget/cocoa/MediaKeysEventSourceFactory.cpp
+
+---
+ widget/cocoa/MediaKeysEventSourceFactory.cpp | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/widget/cocoa/MediaKeysEventSourceFactory.cpp b/widget/cocoa/MediaKeysEventSourceFactory.cpp
+index 5751a716df..1a5ad93b4c 100644
+--- a/widget/cocoa/MediaKeysEventSourceFactory.cpp
++++ b/widget/cocoa/MediaKeysEventSourceFactory.cpp
+@@ -6,12 +6,17 @@
+ 
+ #include "MediaHardwareKeysEventSourceMac.h"
+ #include "MediaHardwareKeysEventSourceMacMediaCenter.h"
++#include "nsCocoaFeatures.h"
+ 
+ namespace mozilla {
+ namespace widget {
+ 
+ mozilla::dom::MediaControlKeySource* CreateMediaControlKeySource() {
+-  return new MediaHardwareKeysEventSourceMacMediaCenter();
++  if (nsCocoaFeatures::IsAtLeastVersion(10, 12, 2)) {
++    return new MediaHardwareKeysEventSourceMacMediaCenter();
++  } else {
++    return new MediaHardwareKeysEventSourceMac();
++  }
+ }
+ 
+ }  // namespace widget
+-- 
+2.53.0
+

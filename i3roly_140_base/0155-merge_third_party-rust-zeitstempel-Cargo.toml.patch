@@ -1,0 +1,28 @@
+From 71b613c54d5d04c7a9dbf1b1095d47747cd8cde7 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:25 +0700
+Subject: [PATCH 155/246] merge_third_party/rust/zeitstempel/Cargo.toml
+
+---
+ third_party/rust/zeitstempel/Cargo.toml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/third_party/rust/zeitstempel/Cargo.toml b/third_party/rust/zeitstempel/Cargo.toml
+index 73efa45ec0..061c6c0cab 100644
+--- a/third_party/rust/zeitstempel/Cargo.toml
++++ b/third_party/rust/zeitstempel/Cargo.toml
+@@ -24,7 +24,11 @@ version = "1.0.0"
+ [dependencies.once_cell]
+ version = "1.5.2"
+ 
++[dependencies]
++whatsys = "0.3"
++
+ [features]
+ win10plus = []
++
+ [target."cfg(any(target_os = \"linux\", target_os = \"android\", target_os = \"macos\", target_os = \"ios\"))".dependencies.libc]
+ version = "0.2"
+-- 
+2.53.0
+

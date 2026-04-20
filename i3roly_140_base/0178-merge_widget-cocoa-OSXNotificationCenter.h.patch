@@ -1,0 +1,27 @@
+From c7f8e7ac563b341e66eebeacbc78f31b7a605b3c Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:36:04 +0700
+Subject: [PATCH 178/246] merge_widget/cocoa/OSXNotificationCenter.h
+
+---
+ widget/cocoa/OSXNotificationCenter.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/widget/cocoa/OSXNotificationCenter.h b/widget/cocoa/OSXNotificationCenter.h
+index 652f72f97c..242caa32aa 100644
+--- a/widget/cocoa/OSXNotificationCenter.h
++++ b/widget/cocoa/OSXNotificationCenter.h
+@@ -18,6 +18,10 @@
+ // working.
+ @class mozNotificationCenterDelegate;
+ 
++#if !defined(MAC_OS_X_VERSION_10_8) || (MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_8)
++typedef NSInteger NSUserNotificationActivationType;
++#endif
++
+ namespace mozilla {
+ 
+ class OSXNotificationInfo;
+-- 
+2.53.0
+

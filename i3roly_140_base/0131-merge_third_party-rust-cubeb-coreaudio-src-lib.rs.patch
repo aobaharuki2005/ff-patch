@@ -1,0 +1,25 @@
+From 500f5fb8aad8e174ea753bbe461c610c4bd83ab9 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:34:47 +0700
+Subject: [PATCH 131/246] merge_third_party/rust/cubeb-coreaudio/src/lib.rs
+
+---
+ third_party/rust/cubeb-coreaudio/src/lib.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/third_party/rust/cubeb-coreaudio/src/lib.rs b/third_party/rust/cubeb-coreaudio/src/lib.rs
+index bf1ae96f0c..1cf8c300ce 100644
+--- a/third_party/rust/cubeb-coreaudio/src/lib.rs
++++ b/third_party/rust/cubeb-coreaudio/src/lib.rs
+@@ -2,7 +2,7 @@
+ //
+ // This program is made available under an ISC-style license.  See the
+ // accompanying file LICENSE for details.
+-
++#![feature(result_option_inspect)]
+ extern crate atomic;
+ #[macro_use]
+ extern crate bitflags;
+-- 
+2.53.0
+

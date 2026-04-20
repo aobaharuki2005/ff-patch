@@ -1,0 +1,25 @@
+From 59743c6f3f0bd9f20475525dbb6586721151c0e2 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:35:39 +0700
+Subject: [PATCH 166/246] merge_toolkit/xre/nsNativeAppSupportCocoa.mm
+
+---
+ toolkit/xre/nsNativeAppSupportCocoa.mm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/toolkit/xre/nsNativeAppSupportCocoa.mm b/toolkit/xre/nsNativeAppSupportCocoa.mm
+index 6f4b96b88d..37c2f03cee 100644
+--- a/toolkit/xre/nsNativeAppSupportCocoa.mm
++++ b/toolkit/xre/nsNativeAppSupportCocoa.mm
+@@ -72,7 +72,7 @@ NS_IMETHODIMP nsNativeAppSupportCocoa::Start(bool* _retval) {
+   // alert here.  But the alert's message and buttons would require custom
+   // localization.  So (for now at least) we just log an English message
+   // to the console before quitting.
+-  if (major < 10 || (major == 10 && minor < 12)) {
++  if (major < 10 || (major == 10 && minor < 7)) {
+     NSLog(@"Minimum OS version requirement not met!");
+     return NS_OK;
+   }
+-- 
+2.53.0
+

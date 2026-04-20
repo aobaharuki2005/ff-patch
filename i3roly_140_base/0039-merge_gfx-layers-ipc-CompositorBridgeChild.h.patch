@@ -1,0 +1,32 @@
+From e0c2ef31aa57774cf0e81fbd8564a334ece8f0f7 Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:32:09 +0700
+Subject: [PATCH 039/246] merge_gfx/layers/ipc/CompositorBridgeChild.h
+
+---
+ gfx/layers/ipc/CompositorBridgeChild.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/gfx/layers/ipc/CompositorBridgeChild.h b/gfx/layers/ipc/CompositorBridgeChild.h
+index abc3df6fce..1b2b6d0eee 100644
+--- a/gfx/layers/ipc/CompositorBridgeChild.h
++++ b/gfx/layers/ipc/CompositorBridgeChild.h
+@@ -147,6 +147,7 @@ class CompositorBridgeChild final : public PCompositorBridgeChild,
+   static void ShutDown();
+ 
+   FwdTransactionCounter& GetFwdTransactionCounter();
++  void WindowOverlayChanged() { mWindowOverlayChanged = true; }
+ 
+   /**
+    * Hold TextureClient ref until end of usage on host side if
+@@ -230,6 +231,7 @@ class CompositorBridgeChild final : public PCompositorBridgeChild,
+   // True until the beginning of the two-step shutdown sequence of this actor.
+   bool mCanSend;
+ 
++  bool mWindowOverlayChanged;
+   // False until the actor is destroyed.
+   bool mActorDestroyed;
+ 
+-- 
+2.53.0
+

@@ -1,0 +1,55 @@
+From 5bc425be197095e47899ad2c7ab4f38059cc812b Mon Sep 17 00:00:00 2001
+From: aobaharuki2005 <tranbaohnth@outlook.com>
+Date: Sun, 19 Apr 2026 22:31:26 +0700
+Subject: [PATCH 010/246] merge_config/rules.mk
+
+---
+ config/rules.mk | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
+
+diff --git a/config/rules.mk b/config/rules.mk
+index e1504bbd16..be39af4ee2 100644
+--- a/config/rules.mk
++++ b/config/rules.mk
+@@ -149,14 +149,16 @@ MOZ_PROGRAM_LDFLAGS += -Wl,-rpath -Wl,@executable_path/Frameworks
+ endif
+ endif
+ 
+-# For Mac executables, set the @rpath to be @executable_path by default so that
+-# shared libraries built with an @rpath install name in the same directory
+-# as the executable can be resolved. Executables not in the same directory
+-# should override the @rpath with a relative path such as @executable_path/../
+-# depending on their install location.
+-ifeq ($(OS_ARCH),Darwin)
+-MOZ_PROGRAM_LDFLAGS += -Wl,-rpath,@executable_path
+-endif
++## this is part of commit https://hg.mozilla.org/mozilla-unified/rev/1bc4ee894015268a6be66950b80705e73f17147e
++# which is being removed for backwards compatibility purcpoases
++## For Mac executables, set the @rpath to be @executable_path by default so that
++## shared libraries built with an @rpath install name in the same directory
++## as the executable can be resolved. Executables not in the same directory
++## should override the @rpath with a relative path such as @executable_path/../
++## depending on their install location.
++#ifeq ($(OS_ARCH),Darwin)
++#MOZ_PROGRAM_LDFLAGS += -Wl,-rpath,@executable_path
++#endif
+ 
+ ifeq ($(OS_ARCH),WINNT)
+ ifeq ($(CC_TYPE),clang)
+@@ -274,9 +276,12 @@ endif
+ # MacOS X specific stuff
+ #
+ 
++# see
++# https://hg.mozilla.org/mozilla-unified/rev/1bc4ee894015268a6be66950b80705e73f17147e
++# for why we are setting loader path back to executable path
+ ifeq ($(OS_ARCH),Darwin)
+ ifneq (,$(SHARED_LIBRARY))
+-_LOADER_PATH := @rpath
++_LOADER_PATH := @executable_path
+ EXTRA_DSO_LDOPTS	+= -dynamiclib -install_name $(_LOADER_PATH)/$(@F) -compatibility_version 1 -current_version 1
+ endif
+ endif
+-- 
+2.53.0
+
