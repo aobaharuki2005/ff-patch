@@ -1,6 +1,6 @@
 [submodule "gnuzilla"]
 	path = gnuzilla
-	url = git://git.git.savannah.gnu.org/gnuzilla.git
+	url = https://github.com/aobaharuki2005/gnuzilla.git
 [submodule "librewolf"]
 	path = librewolf
-	url = https://codeberg.org/librewolf/source.git
+	url = https://github.com/aobaharuki2005/librewolf.git
