@@ -1,0 +1,6 @@
+[submodule "gnuzilla"]
+	path = gnuzilla
+	url = git://git.git.savannah.gnu.org/gnuzilla.git
+[submodule "librewolf"]
+	path = librewolf
+	url = https://codeberg.org/librewolf/source.git
